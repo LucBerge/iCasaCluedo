@@ -12,6 +12,7 @@
       <callback method="unbindPerson" type="unbind"/>
     </requires>
     <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoPlateService"/>
+    <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoCommandService"/>
   </component>
   <component classname="fr.esisar.icasa.cluedo.player.CluedoPlayer" name="CluedoPlayer">
     <callback method="start" transition="validate"/>

@@ -21,6 +21,6 @@ public class Clue {
 	
 	@Override
 	public String toString() {
-		return "Clue [card=" + card + ", player=" + player.getName() + "]";
+		return getPlayer().getName() + " montre la carte " + getCard().getName();
 	}
 }

@@ -70,6 +70,9 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	/** Registered players*/
 	private List<Player> players = new ArrayList<Player>();
 
+	/** All known clues */
+	private List<Clue> clues = new ArrayList<Clue>();
+
 	@Override
 	public int getNumberOfPlayers() {
 		return numberOfPlayers;
@@ -113,7 +116,8 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	/** Unbind Method for persons dependency */
-	public synchronized void unbindPerson(fr.liglab.adele.icasa.simulator.Person person, Map<String, String> properties) {
+	public synchronized void unbindPerson(fr.liglab.adele.icasa.simulator.Person person,
+			Map<String, String> properties) {
 		System.out.println("Unbind person " + person.getName());
 		person.removeListener(this);
 	}
@@ -134,6 +138,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	public synchronized void reset() {
 		if (gameStarted) {
 			players.clear();
+			clues.clear();
 			gameStarted = false;
 			turn = -1;
 		}
@@ -206,32 +211,33 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		else
 			turn++;
 
-		if (clue != null)
-			System.out.println(clue.getPlayer().getName() + " montre la carte " + clue.getCard().getName());
-		else if(gameStarted)
+		if (clue != null) {
+			clues.add(clue);
+			System.out.println(clue);
+		} else if (gameStarted)
 			System.out.println("Personne ne possède ces cartes !");
 
 		return clue;
 	}
 
 	private void shuffle() {
-		
+
 		//Get a random crime
 		crime = Crime.getRandom();
 		System.out.println(crime);
-		
+
 		//Init
 		List<Card> deck = new ArrayList<Card>();
 		deck.addAll(Arrays.asList(CARDS_PERSONS));
 		deck.addAll(Arrays.asList(CARDS_WEAPONS));
 		deck.addAll(Arrays.asList(CARDS_ROOMS));
-		
+
 		deck.remove(crime.getPerson());
 		deck.remove(crime.getWeapon());
 		deck.remove(crime.getRoom());
-		
+
 		Collections.shuffle(deck);
-		
+
 		//Distribute
 		int i = 0;
 		for (Player player : players) {
@@ -266,13 +272,19 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	@Override
+	public synchronized List<Clue> getClues() {
+		return clues;
+	}
+
+	@Override
 	public synchronized boolean AICanChoose() {
-		return players.size() > 0;
+		return true;
+		//return players.size() > 0;
 	}
 
 	@Override
 	public synchronized boolean myTurn(Player player) throws Exception {
-		if(turn == -1)
+		if (turn == -1)
 			throw new Exception("La partie est finie.");
 		return players.get(turn).equals(player);
 	}

@@ -39,7 +39,7 @@ public class CluedoPlayer implements CluedoPlayerService {
 	public void suppose(Crime supposition) throws Exception {
 		cluedoPlateService.supposition(new Supposition(me, supposition));
 	}
-	
+
 	@Override
 	public Player getPlayer() {
 		return me;

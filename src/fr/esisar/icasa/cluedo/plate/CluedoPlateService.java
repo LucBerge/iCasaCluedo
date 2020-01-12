@@ -1,5 +1,7 @@
 package fr.esisar.icasa.cluedo.plate;
 
+import java.util.List;
+
 import fr.esisar.icasa.cluedo.common.Clue;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
@@ -37,4 +39,9 @@ public interface CluedoPlateService {
 	 * @throws Exception
 	 */
 	Clue supposition(Supposition supposition) throws Exception;
+
+	/** Get all the known clues.
+	 * @return Known clues.
+	 */
+	List<Clue> getClues();
 }

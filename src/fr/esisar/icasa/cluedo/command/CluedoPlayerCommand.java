@@ -18,7 +18,7 @@ import fr.liglab.adele.icasa.command.handler.CommandProvider;
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlayerCommand {
 
-	/** Field for CluedoCommandService dependency */
+	/** Field for CluedoPlayerService dependency */
 	@Requires
 	private CluedoPlayerService cluedoPlayerService;
 

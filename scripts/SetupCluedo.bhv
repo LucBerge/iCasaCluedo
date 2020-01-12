@@ -1,0 +1,69 @@
+<behavior startdate="27/10/2011-00:00:00" factor="1440">
+	 
+	<create-zone id="Cuisine"  leftX="40" topY="43" X-Length="140" Y-Length="140" />	 
+	<add-zone-variable zoneId="Cuisine" variable="Illuminance" />
+	<modify-zone-variable zoneId="Cuisine" variable="Illuminance" value="0"/>
+
+	<create-zone id="Salle de Bal"  leftX="230" topY="70" X-Length="180" Y-Length="130" />	 
+	<add-zone-variable zoneId="Salle de Bal" variable="Illuminance" />
+	<modify-zone-variable zoneId="Salle de Bal" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Conservatoire"  leftX="450" topY="40" X-Length="150" Y-Length="115" />	 
+	<add-zone-variable zoneId="Conservatoire" variable="Illuminance" />
+	<modify-zone-variable zoneId="Conservatoire" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Salle à Manger"  leftX="40" topY="230" X-Length="180" Y-Length="160" />	 
+	<add-zone-variable zoneId="Salle à Manger" variable="Illuminance" />
+	<modify-zone-variable zoneId="Salle à Manger" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Salle de Billard"  leftX="450" topY="205" X-Length="150" Y-Length="120" />	 
+	<add-zone-variable zoneId="Salle de Billard" variable="Illuminance" />
+	<modify-zone-variable zoneId="Salle de Billard" variable="Illuminance" value="0"/>	
+
+	<create-zone id="Bibliothèque"  leftX="430" topY="345" X-Length="165" Y-Length="115" />	 
+	<add-zone-variable zoneId="Bibliothèque" variable="Illuminance" />
+	<modify-zone-variable zoneId="Bibliothèque" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Véranda"  leftX="40" topY="460" X-Length="160" Y-Length="150" />	 
+	<add-zone-variable zoneId="Véranda" variable="Illuminance" />
+	<modify-zone-variable zoneId="Véranda" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Hall"  leftX="250" topY="440" X-Length="135" Y-Length="155" />	 
+	<add-zone-variable zoneId="Hall" variable="Illuminance" />
+	<modify-zone-variable zoneId="Hall" variable="Illuminance" value="0"/>
+	
+	<create-zone id="Bureau"  leftX="435" topY="505" X-Length="165" Y-Length="100" />	 
+	<add-zone-variable zoneId="Bureau" variable="Illuminance" />
+	<modify-zone-variable zoneId="Bureau" variable="Illuminance" value="0"/>
+	
+	<create-zone id="waiting"  leftX="250" topY="230" X-Length="165" Y-Length="185" />	 
+	<add-zone-variable zoneId="waiting" variable="Illuminance" />
+	<modify-zone-variable zoneId="waiting" variable="Illuminance" value="0"/>
+	
+	<create-device id="Capteur de présence" type="iCasa.PresenceSensor" />
+	<move-device-zone deviceId="Capteur de présence" zoneId="waiting" />
+	<create-device id="Haut parleur" type="iCasa.Speaker" />
+	<move-device-zone deviceId="Haut parleur" zoneId="waiting" />
+	<create-device id="Radiateur" type="iCasa.Heater" />
+	<move-device-zone deviceId="Radiateur" zoneId="waiting" />
+	<create-device id="Lampe" type="iCasa.BinaryLight" />
+	<move-device-zone deviceId="Lampe" zoneId="waiting" />
+	<create-device id="Thermomètre" type="iCasa.Thermometer" />
+	<move-device-zone deviceId="Thermomètre" zoneId="waiting" />
+	<create-device id="Tablette" type="iCasa.Tablet" />
+	<move-device-zone deviceId="Tablette" zoneId="waiting" />
+	
+	<create-person id="Colonel Moutarde" type="Grandfather" />
+	<move-person-zone personId="Colonel Moutarde" zoneId="waiting" />
+	<create-person id="Madame Pervenche" type="Grandmother" />
+	<move-person-zone personId="Madame Pervenche" zoneId="waiting" />
+	<create-person id="Mademoiselle Rose" type="Girl" />
+	<move-person-zone personId="Mademoiselle Rose" zoneId="waiting" />
+	<create-person id="Professeur Violet" type="Boy" />
+	<move-person-zone personId="Professeur Violet" zoneId="waiting" />
+	<create-person id="Madame Leblanc" type="Mother" />
+	<move-person-zone personId="Madame Leblanc" zoneId="waiting" />
+	<create-person id="Docteur Olive" type="Father" />
+	<move-person-zone personId="Docteur Olive" zoneId="waiting" />
+		
+</behavior>

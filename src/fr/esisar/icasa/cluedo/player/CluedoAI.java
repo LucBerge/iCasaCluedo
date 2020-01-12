@@ -44,7 +44,8 @@ public class CluedoAI {
 					while (true) {
 						play();
 					}
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+				}
 			}
 		});
 		t.start();

@@ -1,9 +1,14 @@
 package fr.esisar.icasa.cluedo.common;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class Room extends Card{
     public static final Room CONSERVATOIRE = new Room("Conservatoire");
     public static final Room CUISINE = new Room("Cuisine");
-    public static final Room SALLE_A_MANGER = new Room("Salle à Banger");
+    public static final Room SALLE_A_MANGER = new Room("Salle à Manger");
     public static final Room SALLE_DE_BALLE = new Room("Salle de Bal");
     public static final Room BUREAU = new Room("Bureau");
     public static final Room SALLE_DE_BILLARD = new Room("Salle de Billard");
@@ -15,6 +20,13 @@ public class Room extends Card{
     
     private Room(String name) {
     	super(name);
+    }
+
+    public static Room getRandom() {
+    	List<Room> suffled = new ArrayList<Room>();
+    	suffled.addAll(Arrays.asList(ALL));
+		Collections.shuffle(suffled);
+		return suffled.get(0);
     }
     
     public static Room fromName(String name) {

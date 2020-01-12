@@ -42,12 +42,6 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	 */
 	public static final Card[] CARDS_ROOMS = Room.ALL.clone();
 
-	
-	/**
-	 * The shuffled decks
-	 */
-	List<List<Card>> decks = new ArrayList<List<Card>>();
-	
 	/**
 	 * Define if the game has started
 	 */
@@ -91,7 +85,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		if (gameStarted)
 			throw new Exception("Le jeu a déjà débuté !");
 
-		if (players.size() != 0)
+		if (players.size() > 0)
 			throw new Exception(players.size() + " joueurs ont déjà rejoind la partie.");
 
 		this.numberOfPlayers = numberOfPlayers;
@@ -140,7 +134,6 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	public synchronized void reset() {
 		if (gameStarted) {
 			players.clear();
-			decks.clear();
 			gameStarted = false;
 			turn = -1;
 		}
@@ -149,13 +142,14 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
 		if (gameStarted) {
-			List<GenericDevice> devices = getGenericDeviceFromLocation(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-			
-			if(devices.size() == 1) {
-				Weapon weapon =  Weapon.fromSerialNumber(devices.get(0).getSerialNumber());
+			List<GenericDevice> devices = getGenericDeviceFromLocation(
+					device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
+
+			if (devices.size() == 1) {
+				Weapon weapon = Weapon.fromSerialNumber(devices.get(0).getSerialNumber());
 				Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
 				Person person = null;
-				
+
 				System.out.println(weapon);
 				System.out.println(room);
 				System.out.println(person);
@@ -187,36 +181,37 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		Clue clue = null;
 		System.out.println(player.getName() + " fait la supposition que " + supposition.getPerson() + " a tué avec " + supposition.getWeapon() + " dans le/la " + supposition.getRoom());
 
+		System.out.println(supposition);
 		if (crime.equals(supposition)) {
 			System.out.println(player.getName() + "a gagné !!!");
 			reset();
 		} else {
-			for(int i=0;i<turn;i++) {
+			for (int i = 0; i < turn; i++) {
 				clue = players.get(i).getClue(supposition);
-				if(clue != null) {
+				if (clue != null) {
 					break;
 				}
 			}
-			if(clue == null) {
-				for(int i=turn+1;i<players.size();i++) {
+			if (clue == null) {
+				for (int i = turn + 1; i < players.size(); i++) {
 					clue = players.get(i).getClue(supposition);
-					if(clue != null) {
+					if (clue != null) {
 						break;
 					}
 				}
 			}
 		}
-		
+
 		if (turn >= players.size() - 1)
 			turn = 0;
 		else
 			turn++;
 
-		if(clue != null)
+		if (clue != null)
 			System.out.println(clue.getPlayer().getName() + " montre la carte " + clue.getCard().getName());
-		else
+		else if(gameStarted)
 			System.out.println("Personne ne possède ces cartes !");
-			
+
 		return clue;
 	}
 
@@ -255,17 +250,21 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 		//Shuffle all
 		Collections.shuffle(shuffledCards);
-		
+
 		//Distribute
-		for (int i=0; i<numberOfPlayers; i++) {
+		int i = 0;
+		for (Player player : players) {
 			int j = 0;
-			List<Card> deck = new ArrayList<Card>();
 			while (i + j < shuffledCards.size()) {
-				deck.add(shuffledCards.get(i + j));
+				player.getCards().add(shuffledCards.get(i + j));
 				j += numberOfPlayers;
 			}
-			decks.add(deck);
+			i++;
 		}
+
+		players.stream().forEach(p -> System.out.println(p));
+		gameStarted = true;
+		turn = 0;
 	};
 
 	@Override
@@ -276,32 +275,26 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		if (players.stream().anyMatch(p -> p.getPerson().equals(person)))
 			throw new Exception("Personnage déjà utilisé.");
 
-		if(decks.isEmpty())
-			shuffle();
-		
 		Player player = new Player(person, name);
-		player.setCards(decks.get(players.size()));
 		players.add(player);
-		
-		if (players.size() == numberOfPlayers) {
-			players.stream().forEach(p -> System.out.println(p));
-			gameStarted = true;
-			turn = 0;
-		}
+
+		if (players.size() == numberOfPlayers)
+			shuffle();
 
 		return player;
 	}
 
 	@Override
 	public synchronized boolean AICanChoose() {
-		return true;
-		//return players.size() > 0;
+		//return true;
+		return players.size() > 0;
 	}
 
 	@Override
-	public synchronized boolean myTurn(Player player) {
+	public synchronized boolean myTurn(Player player) throws Exception {
+		if(turn == -1)
+			throw new Exception("La partie est finie.");
 		return players.get(turn).equals(player);
-		//return players.get(turn).getPerson().getName().equals(player.getPerson().getName());
 	}
 
 	@Override

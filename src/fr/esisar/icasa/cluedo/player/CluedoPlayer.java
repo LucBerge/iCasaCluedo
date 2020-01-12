@@ -1,8 +1,8 @@
 package fr.esisar.icasa.cluedo.player;
 
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 
+import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
@@ -35,6 +35,11 @@ public class CluedoPlayer implements CluedoPlayerService {
 	}
 
 	@Override
+	public void suppose(Crime supposition) throws Exception {
+		cluedoPlateService.supposition(me, supposition);
+	}
+	
+	@Override
 	public Player getPlayer() {
 		return me;
 	}
@@ -45,7 +50,7 @@ public class CluedoPlayer implements CluedoPlayerService {
 	}
 
 	@Override
-	public boolean myTurn() {
+	public boolean myTurn() throws Exception {
 		return cluedoPlateService.myTurn(me);
 	}
 

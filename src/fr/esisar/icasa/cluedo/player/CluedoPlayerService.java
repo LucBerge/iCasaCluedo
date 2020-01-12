@@ -1,5 +1,6 @@
 package fr.esisar.icasa.cluedo.player;
 
+import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 
@@ -22,11 +23,18 @@ public interface CluedoPlayerService {
 
 	/**
 	 * @return
+	 * @throws Exception 
 	 */
-	boolean myTurn();
+	boolean myTurn() throws Exception;
 
 	/**
 	 * @return
 	 */
 	boolean isGameStarted();
+
+	/**
+	 * @param supposition
+	 * @throws Exception 
+	 */
+	public void suppose(Crime supposition) throws Exception;
 }

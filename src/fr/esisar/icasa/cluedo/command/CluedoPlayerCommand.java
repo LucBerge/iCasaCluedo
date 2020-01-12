@@ -4,8 +4,11 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Requires;
 
+import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
+import fr.esisar.icasa.cluedo.common.Room;
+import fr.esisar.icasa.cluedo.common.Weapon;
 import fr.esisar.icasa.cluedo.player.CluedoPlayerService;
 import fr.liglab.adele.icasa.command.handler.Command;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
@@ -33,29 +36,38 @@ public class CluedoPlayerCommand {
 	 * Join the game with a person.
 	 */
 	@Command
-	public void join(String person) {
+	public void join(String personName) {
 		try {
-			switch (person) {
-			case "COLONEL_MOUTARDE":
-				cluedoPlayerService.join(Person.COLONEL_MOUTARDE, "Joueur");
-				break;
-			case "DOCTEUR_OLIVE":
-				cluedoPlayerService.join(Person.DOCTEUR_OLIVE, "Joueur");
-				break;
-			case "MADAME_LEBLANC":
-				cluedoPlayerService.join(Person.MADAME_LEBLANC, "Joueur");
-				break;
-			case "MADAME_PERVANCHE":
-				cluedoPlayerService.join(Person.MADAME_PERVANCHE, "Joueur");
-				break;
-			case "MADEMOISELLE_ROSE":
-				cluedoPlayerService.join(Person.MADEMOISELLE_ROSE, "Joueur");
-				break;
-			case "PROFESSEUR_VIOLET":
-				cluedoPlayerService.join(Person.PROFESSEUR_VIOLET, "Joueur");
-				break;
-			default:
-				System.out.println("Le personnage " + person + " n'existe pas.");
+			Person person = Person.fromName(personName);
+			if(person != null)
+				cluedoPlayerService.join(person, "Joueur");
+			else
+				System.out.println("Le personnage " + personName + " n'existe pas.");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Make a supposition.
+	 */
+	@Command
+	public void suppose(String personName, String weaponName, String roomName) {
+		try {
+			Person person = Person.fromName(personName);
+			Weapon weapon = Weapon.fromSerialNumber(weaponName);
+			Room room = Room.fromName(roomName);
+			if(person != null && weapon != null && room != null) {
+				Crime supposition = new Crime(person, weapon, room);
+				cluedoPlayerService.suppose(supposition);
+			}
+			else {
+				if(person == null)
+					System.out.println("Le personnage " + personName + " n'existe pas.");
+				if(weapon == null)
+					System.out.println("L'arme " + weaponName + " n'existe pas.");
+				if(room == null)
+					System.out.println("La pièce " + roomName + " n'existe pas.");
 			}
 		}catch(Exception e) {
 			System.out.println(e.getMessage());

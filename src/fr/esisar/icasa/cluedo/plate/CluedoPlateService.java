@@ -1,6 +1,5 @@
 package fr.esisar.icasa.cluedo.plate;
 
-import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Clue;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
@@ -23,8 +22,9 @@ public interface CluedoPlateService {
 
 	/** Say if a player can play.
 	 * @return true if he can.
+	 * @throws Exception 
 	 */
-	boolean myTurn(Player player);
+	boolean myTurn(Player player) throws Exception;
 
 	/**
 	 * @return

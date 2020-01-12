@@ -12,7 +12,6 @@
       <callback method="unbindPerson" type="unbind"/>
     </requires>
     <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoPlateService"/>
-    <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoCommandService"/>
   </component>
   <component classname="fr.esisar.icasa.cluedo.player.CluedoPlayer" name="CluedoPlayer">
     <callback method="start" transition="validate"/>
@@ -28,6 +27,7 @@
   <instance component="CluedoAi" name="CluedoAi-1"/>
   <instance component="CluedoAi" name="CluedoAi-2"/>
   <instance component="CluedoAi" name="CluedoAi-3"/>
-  <instance component="CluedoPlate" name="CluedoPlate-1"/>
   <instance component="CluedoPlayer" name="CluedoPlayer-1"/>
+  <instance component="CluedoPlate" name="CluedoPlate-2"/>
+  <instance component="CluedoAi" name="CluedoAi-4"/>
 </ipojo>

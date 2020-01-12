@@ -28,6 +28,6 @@
   <instance component="CluedoAi" name="CluedoAi-1"/>
   <instance component="CluedoAi" name="CluedoAi-2"/>
   <instance component="CluedoAi" name="CluedoAi-3"/>
-  <instance component="CluedoAi" name="CluedoAi-4"/>
   <instance component="CluedoPlate" name="CluedoPlate-1"/>
+  <instance component="CluedoPlayer" name="CluedoPlayer-1"/>
 </ipojo>

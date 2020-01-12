@@ -42,6 +42,16 @@ public class CluedoPlateCommand {
 	}
 	
 	@Command
+	public void setFullAI(String fullAI) {
+		try {
+			
+			cluedoCommandService.setFullAI(Boolean.parseBoolean(fullAI));
+		}catch(Exception e) {
+			System.out.println(fullAI + " is not a number.");
+		}
+	}
+	
+	@Command
 	public void reset() {
 		cluedoCommandService.reset();
 	}

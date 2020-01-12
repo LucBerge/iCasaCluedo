@@ -41,9 +41,10 @@ public class CluedoAI {
 			@Override
 			public void run() {
 				try {
-					play();
-				} catch (InterruptedException e) {
-				}
+					while (true) {
+						play();
+					}
+				} catch (InterruptedException e) {}
 			}
 		});
 		t.start();

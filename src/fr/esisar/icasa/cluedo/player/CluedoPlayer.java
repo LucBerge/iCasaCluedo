@@ -30,8 +30,6 @@ public class CluedoPlayer implements CluedoPlayerService {
 
 	@Override
 	public void join(Person person, String name) throws Exception {
-		if (me != null)
-			throw new Exception("Vous êtes déjà enregistré en tant que " + person.getName());
 		me = cluedoPlateService.register(person, name);
 	}
 

@@ -73,6 +73,8 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	/** All known clues */
 	private List<Clue> clues = new ArrayList<Clue>();
 
+	private boolean fullAI = false;
+
 	@Override
 	public int getNumberOfPlayers() {
 		return numberOfPlayers;
@@ -141,6 +143,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			clues.clear();
 			gameStarted = false;
 			turn = -1;
+			fullAI = false;
 		}
 	}
 
@@ -260,7 +263,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			throw new Exception("Le jeu a déjà débuté !");
 
 		if (players.stream().anyMatch(p -> p.getPerson().equals(person)))
-			throw new Exception("Personnage déjà utilisé.");
+			throw new Exception("Le personnage " + person.getName() + " est déjà utilisé.");
 
 		Player player = new Player(person, name);
 		players.add(player);
@@ -277,9 +280,16 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	@Override
+	public synchronized void setFullAI(boolean fullAI) {
+		this.fullAI = fullAI;
+	}
+
+	@Override
 	public synchronized boolean AICanChoose() {
-		return true;
-		//return players.size() > 0;
+		if (fullAI)
+			return true;
+		else
+			return players.size() > 0;
 	}
 
 	@Override

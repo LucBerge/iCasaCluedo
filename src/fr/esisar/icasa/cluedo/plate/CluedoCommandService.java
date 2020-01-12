@@ -18,4 +18,9 @@ public interface CluedoCommandService {
      * Reset the game
      */
     public void reset();
+
+	/**
+	 * @param fullAI
+	 */
+	void setFullAI(boolean fullAI);
 }

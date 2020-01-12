@@ -7,20 +7,24 @@
     </requires>
     <callback method="start" transition="validate"/>
     <callback method="stop" transition="invalidate"/>
-    <provides specifications="fr.esisar.icasa.cluedo.common.CluedoPlateService"/>
     <requires aggregate="true" optional="true" specification="fr.liglab.adele.icasa.simulator.Person" field="persons">
       <callback method="bindPerson" type="bind"/>
       <callback method="unbindPerson" type="unbind"/>
     </requires>
+    <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoPlateService"/>
   </component>
   <component classname="fr.esisar.icasa.cluedo.player.CluedoPlayer" name="CluedoPlayer">
-    <provides specifications="fr.esisar.icasa.cluedo.common.CluedoPlayerService"/>
-    <requires specification="fr.esisar.icasa.cluedo.common.CluedoPlateService" field="cluedoPlateService"/>
     <callback method="start" transition="validate"/>
     <callback method="stop" transition="invalidate"/>
+    <provides specifications="fr.esisar.icasa.cluedo.player.CluedoPlayerService"/>
+    <requires specification="fr.esisar.icasa.cluedo.plate.CluedoPlateService" field="cluedoPlateService"/>
   </component>
-  <instance component="CluedoPlayer" name="CluedoPlayer-Olive"/>
-  <instance component="CluedoPlayer" name="CluedoPlayer-LeBlanc"/>
-  <instance component="CluedoPlayer" name="CluedoPlayer-Violet"/>
-  <instance component="CluedoPlayer" name="CluedoPlayer-Rose"/>
+  <component classname="fr.esisar.icasa.cluedo.player.CluedoAI" name="CluedoAi">
+    <callback method="start" transition="validate"/>
+    <callback method="stop" transition="invalidate"/>
+    <requires specification="fr.esisar.icasa.cluedo.plate.CluedoPlateService" field="cluedoPlateService"/>
+  </component>
+  <instance component="CluedoAi" name="CluedoAi-1"/>
+  <instance component="CluedoAi" name="CluedoAi-2"/>
+  <instance component="CluedoAi" name="CluedoAi-3"/>
 </ipojo>

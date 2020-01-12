@@ -7,29 +7,35 @@ import java.util.UUID;
 public class Player {
 
 	private UUID uuid;
-	private Person person;
-	private List<String> cards;
+	private Person2 person;
+	private String name;
+	private List<Card> cards;
 	
-	public Player(UUID uuid, Person person) {
+	public Player(Person2 person, String name) {
 		super();
-		this.uuid = uuid;
+		this.uuid = UUID.randomUUID();
 		this.person = person;
-		this.cards = new ArrayList<String>();
+		this.name = name;
+		this.cards = new ArrayList<Card>();
 	}
 
 	public UUID getUuid() {
 		return uuid;
 	}
 
-	public Person getPerson() {
+	public Person2 getPerson() {
 		return person;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
-	public List<String> getCards() {
+	public List<Card> getCards() {
 		return cards;
 	}
 	
-	public void setCards(List<String> cards) {
+	public void setCards(List<Card> cards) {
 		this.cards = cards;
 	}
 

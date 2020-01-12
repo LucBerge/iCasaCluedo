@@ -5,23 +5,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 
-import fr.esisar.icasa.cluedo.common.CluedoCommandService;
-import fr.esisar.icasa.cluedo.common.CluedoPlateService;
+import fr.esisar.icasa.cluedo.common.Card;
+import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
+import fr.esisar.icasa.cluedo.common.Person2;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.device.DeviceListener;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.location.LocatedDevice;
 import fr.liglab.adele.icasa.location.Position;
-import fr.liglab.adele.icasa.simulator.PersonType;
 import fr.liglab.adele.icasa.simulator.listener.PersonListener;
-import fr.liglab.adele.icasa.simulator.listener.PersonTypeListener;
 
 @Component
 @Instantiate(name = "CluedoPlate")
@@ -40,21 +38,17 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	/**
 	 * All the person cards in the game
 	 */
-	public static final String[] CARDS_PERSON = { Person.MADAME_LEBLANC.getName(), Person.MADAME_PERVANCHE.getName(),
-			Person.COLONEL_MOUTARDE.getName(), Person.MADEMOISELLE_ROSE.getName(), Person.DOCTEUR_OLIVE.getName(),
-			Person.PROFESSEUR_VIOLET.getName() };
+	public static final Card[] CARDS_PERSONS = Person.ALL;
 
 	/**
 	 * All the person cards in the game
 	 */
-	public static final String[] CARDS_WEAPONS = { "Tablette", "Lampe", "Radiateur", "Thermomètre",
-			"Détecteur de présence", "Hautparleur" };
+	public static final Card[] CARDS_WEAPONS = Person.ALL;
 
 	/**
 	 * All the person cards in the game
 	 */
-	public static final String[] CARDS_ROOMS = { "Conservatoire", "Cuisine", "Salle à manger", "Salle de bal", "Bureau",
-			"Salle de billard", "Veranda", "Bibliothèque", "Hall" };
+	public static final Card[] CARDS_ROOMS = Person.ALL;
 
 	/**
 	 * Define if the game has started
@@ -65,6 +59,11 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	* The number of players :
 	**/
 	private int numberOfPlayers = 4;
+
+	/**
+	 * The turn index.
+	 */
+	private int turn = -1;
 
 	/** 
 	* The commited crime :
@@ -82,6 +81,11 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public int getNumberOfPlayers() {
 		return numberOfPlayers;
+	}
+
+	@Override
+	public boolean isGameStarted() {
+		return gameStarted;
 	}
 
 	@Override
@@ -139,6 +143,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		if (gameStarted) {
 			players.clear();
 			gameStarted = false;
+			turn = -1;
 		}
 	}
 
@@ -165,17 +170,34 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		return binaryLightsLocation;
 	}
 
+	@Override
+	public synchronized Card supposition(Player player, Crime supposition) throws Exception {
+		if (!players.get(turn).equals(player))
+			throw new Exception("Ce n'est pas à vous de jouer.");
+
+		Card clue = null;
+		System.out.println(player.getName() + " fait la suppose que " + supposition.getPerson() + " a tué avec "
+				+ supposition.getWeapon() + " dans le/la " + supposition.getRoom());
+
+		if (crime.getPerson().equals(supposition)) {
+			System.out.println(player.getName() + "a gagné !!!");
+			reset();
+		} else {
+			System.out.println("Donne une info !");
+		}
+		return clue;
+	}
+
 	private void shuffle() {
-		gameStarted = true;
 
 		//Init
-		List<String> suffledPersons = new ArrayList<String>();
-		List<String> suffledWeapons = new ArrayList<String>();
-		List<String> suffledRooms = new ArrayList<String>();
-		List<String> shuffledCards = new ArrayList<String>();
+		List<Card> suffledPersons = new ArrayList<Card>();
+		List<Card> suffledWeapons = new ArrayList<Card>();
+		List<Card> suffledRooms = new ArrayList<Card>();
+		List<Card> shuffledCards = new ArrayList<Card>();
 
 		//Add
-		suffledPersons.addAll(Arrays.asList(CARDS_PERSON));
+		suffledPersons.addAll(Arrays.asList(CARDS_PERSONS));
 		suffledWeapons.addAll(Arrays.asList(CARDS_WEAPONS));
 		suffledRooms.addAll(Arrays.asList(CARDS_ROOMS));
 
@@ -185,9 +207,9 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		Collections.shuffle(suffledRooms);
 
 		//Pick 1 each
-		String person = suffledPersons.get(0);
-		String weapon = suffledWeapons.get(0);
-		String room = suffledRooms.get(0);
+		Card person = suffledPersons.get(0);
+		Card weapon = suffledWeapons.get(0);
+		Card room = suffledRooms.get(0);
 		crime = new Crime(person, weapon, room);
 		suffledPersons.remove(0);
 		suffledWeapons.remove(0);
@@ -212,25 +234,36 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			i++;
 		}
 
-		players.stream().forEach(s -> System.out.println(s));
+		players.stream().forEach(p -> System.out.println(p));
+		gameStarted = true;
+		turn = 0;
 	};
 
 	@Override
-	public synchronized Player register(Person person) throws Exception {
+	public synchronized Player register(Person2 person, String name) throws Exception {
 		if (gameStarted)
 			throw new Exception("Le jeu a déjà débuté !");
 
 		if (players.stream().anyMatch(p -> p.getPerson().equals(person)))
 			throw new Exception("Personnage déjà utilisé.");
 
-		UUID uuid = UUID.randomUUID();
-		Player player = new Player(uuid, person);
+		Player player = new Player(person, name);
 		players.add(player);
 
 		if (players.size() == numberOfPlayers)
 			shuffle();
 
 		return player;
+	}
+
+	@Override
+	public synchronized boolean AICanChoose() {
+		return players.size() > 0;
+	}
+
+	@Override
+	public synchronized boolean myTurn(Player player) {
+		return players.get(turn).equals(player);
 	}
 
 	@Override

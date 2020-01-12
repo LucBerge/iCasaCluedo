@@ -1,4 +1,4 @@
-package fr.esisar.icasa.cluedo.common;
+package fr.esisar.icasa.cluedo.plate;
 
 public interface CluedoCommandService {    
     /**

@@ -1,14 +1,15 @@
 package fr.esisar.icasa.cluedo.player;
 
 import org.apache.felix.ipojo.annotations.Component;
+import org.apache.felix.ipojo.annotations.Instantiate;
 
-import fr.esisar.icasa.cluedo.common.CluedoPlateService;
-import fr.esisar.icasa.cluedo.common.CluedoPlayerService;
-import fr.esisar.icasa.cluedo.common.Person;
+import fr.esisar.icasa.cluedo.common.Person2;
 import fr.esisar.icasa.cluedo.common.Player;
+import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 
 @Component
+@Instantiate(name = "CluedoPlayer")
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlayer implements CluedoPlayerService {
 
@@ -25,34 +26,32 @@ public class CluedoPlayer implements CluedoPlayerService {
 	/** Component Lifecycle Method */
 	public void start() {
 		System.out.println("Starting " + this.getClass().getName());
-		join(Person.DOCTEUR_OLIVE);
-		if (me == null) {
-			join(Person.MADAME_LEBLANC);
-			if (me == null) {
-				join(Person.PROFESSEUR_VIOLET);
-				if (me == null) {
-					join(Person.MADEMOISELLE_ROSE);
-				}
-			}
-		}
 	}
 
 	@Override
-	public void join(Person person) {
-		try {
-			if (me == null) {
-				me = cluedoPlateService.register(person);
-				System.out.println("Vous vous êtes enregistré en tant que " + person.getName());
-			} else {
-				System.out.println("Vous êtes déjà enregistré en tant que " + person.getName());
-			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+	public void join(Person2 person, String name) throws Exception {
+		if (me != null)
+			throw new Exception("Vous êtes déjà enregistré en tant que " + person.getName());
+		me = cluedoPlateService.register(person, name);
 	}
 
 	@Override
 	public Player getPlayer() {
 		return me;
+	}
+
+	@Override
+	public boolean AICanChoose() {
+		return cluedoPlateService.AICanChoose();
+	}
+
+	@Override
+	public boolean myTurn() {
+		return cluedoPlateService.myTurn(me);
+	}
+
+	@Override
+	public boolean isGameStarted() {
+		return cluedoPlateService.isGameStarted();
 	}
 }

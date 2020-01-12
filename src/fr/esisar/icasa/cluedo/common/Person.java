@@ -1,28 +1,16 @@
 package fr.esisar.icasa.cluedo.common;
 
-public enum Person {
-    MADAME_LEBLANC("Madame LeBlanc"),
-    MADAME_PERVANCHE("Madame Pervenche"),
-    COLONEL_MOUTARDE("Colonel_Moutarde"),
-    MADEMOISELLE_ROSE("Mademoiselle Rose"),
-    DOCTEUR_OLIVE("Docteur Olive"),
-    PROFESSEUR_VIOLET("Professeur Violet");
-	 
-    /**
-     * The corresponding name
-     */
-    private String name;
- 
-    /**
-     * get the name of the player
-     * 
-     * @return The name of the player
-     */
-    public String getName() {
-        return name;
-    }
- 
+public class Person extends Card{
+    public static final Person MADAME_LEBLANC = new Person("Madame LeBlanc");
+    public static final Person MADAME_PERVANCHE = new Person("Madame Pervenche");
+    public static final Person COLONEL_MOUTARDE = new Person("Colonel_Moutarde");
+    public static final Person MADEMOISELLE_ROSE = new Person("Mademoiselle Rose");
+    public static final Person DOCTEUR_OLIVE = new Person("Docteur Olive");
+    public static final Person PROFESSEUR_VIOLET = new Person("Professeur Violet");
+	
+    public static final Person[] ALL = {MADAME_LEBLANC, MADAME_PERVANCHE, COLONEL_MOUTARDE, MADEMOISELLE_ROSE, DOCTEUR_OLIVE, PROFESSEUR_VIOLET};
+
     private Person(String name) {
-    	this.name = name;
+    	super(name);
     }
 }

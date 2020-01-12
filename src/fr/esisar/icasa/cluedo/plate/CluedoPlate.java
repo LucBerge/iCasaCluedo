@@ -24,7 +24,6 @@ import fr.liglab.adele.icasa.location.Position;
 import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 
 @Component
-@Instantiate(name = "CluedoPlate")
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateService, CluedoCommandService {
 
@@ -43,6 +42,12 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	 */
 	public static final Card[] CARDS_ROOMS = Room.ALL.clone();
 
+	
+	/**
+	 * The shuffled decks
+	 */
+	List<List<Card>> decks = new ArrayList<List<Card>>();
+	
 	/**
 	 * Define if the game has started
 	 */
@@ -86,7 +91,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		if (gameStarted)
 			throw new Exception("Le jeu a déjà débuté !");
 
-		if (numberOfPlayers < players.size())
+		if (players.size() != 0)
 			throw new Exception(players.size() + " joueurs ont déjà rejoind la partie.");
 
 		this.numberOfPlayers = numberOfPlayers;
@@ -135,6 +140,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	public synchronized void reset() {
 		if (gameStarted) {
 			players.clear();
+			decks.clear();
 			gameStarted = false;
 			turn = -1;
 		}
@@ -179,14 +185,12 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			throw new Exception("Ce n'est pas à vous de jouer.");
 
 		Clue clue = null;
-		System.out.println(player.getName() + " fait la suppose que " + supposition.getPerson() + " a tué avec "
-				+ supposition.getWeapon() + " dans le/la " + supposition.getRoom());
+		System.out.println(player.getName() + " fait la supposition que " + supposition.getPerson() + " a tué avec " + supposition.getWeapon() + " dans le/la " + supposition.getRoom());
 
 		if (crime.equals(supposition)) {
 			System.out.println(player.getName() + "a gagné !!!");
 			reset();
 		} else {
-			Player givesClue;
 			for(int i=0;i<turn;i++) {
 				clue = players.get(i).getClue(supposition);
 				if(clue != null) {
@@ -239,6 +243,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		Card weapon = suffledWeapons.get(0);
 		Card room = suffledRooms.get(0);
 		crime = new Crime(person, weapon, room);
+		System.out.println(crime);
 		suffledPersons.remove(0);
 		suffledWeapons.remove(0);
 		suffledRooms.remove(0);
@@ -252,19 +257,15 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		Collections.shuffle(shuffledCards);
 		
 		//Distribute
-		int i = 0;
-		for (Player player : players) {
+		for (int i=0; i<numberOfPlayers; i++) {
 			int j = 0;
+			List<Card> deck = new ArrayList<Card>();
 			while (i + j < shuffledCards.size()) {
-				player.getCards().add(shuffledCards.get(i + j));
+				deck.add(shuffledCards.get(i + j));
 				j += numberOfPlayers;
 			}
-			i++;
+			decks.add(deck);
 		}
-
-		players.stream().forEach(p -> System.out.println(p));
-		gameStarted = true;
-		turn = 0;
 	};
 
 	@Override
@@ -275,24 +276,32 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		if (players.stream().anyMatch(p -> p.getPerson().equals(person)))
 			throw new Exception("Personnage déjà utilisé.");
 
-		System.out.println(name + " joue avec " + person);
-		Player player = new Player(person, name);
-		players.add(player);
-
-		if (players.size() == numberOfPlayers)
+		if(decks.isEmpty())
 			shuffle();
+		
+		Player player = new Player(person, name);
+		player.setCards(decks.get(players.size()));
+		players.add(player);
+		
+		if (players.size() == numberOfPlayers) {
+			players.stream().forEach(p -> System.out.println(p));
+			gameStarted = true;
+			turn = 0;
+		}
 
 		return player;
 	}
 
 	@Override
 	public synchronized boolean AICanChoose() {
-		return players.size() > 0;
+		return true;
+		//return players.size() > 0;
 	}
 
 	@Override
 	public synchronized boolean myTurn(Player player) {
 		return players.get(turn).equals(player);
+		//return players.get(turn).getPerson().getName().equals(player.getPerson().getName());
 	}
 
 	@Override

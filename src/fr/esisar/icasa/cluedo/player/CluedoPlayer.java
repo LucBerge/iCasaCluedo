@@ -9,7 +9,6 @@ import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 
 @Component
-@Instantiate(name = "CluedoPlayer")
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlayer implements CluedoPlayerService {
 

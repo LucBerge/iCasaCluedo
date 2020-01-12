@@ -47,187 +47,188 @@ Import-Package: fr.esisar.icasa.cluedo.common, fr.esisar.icasa.cluedo.
  ion=1.3
 iPOJO-Components: instance { $component="CluedoAi" $name="CluedoAi-1" 
  }instance { $component="CluedoAi" $name="CluedoAi-2" }instance { $com
- ponent="CluedoAi" $name="CluedoAi-3" }instance { $name="CluedoPlayerC
- ommand" $component="fr.esisar.icasa.cluedo.command.CluedoPlayerComman
- d" }instance { $name="CluedoPlate" $component="fr.esisar.icasa.cluedo
- .plate.CluedoPlate" }instance { $name="CluedoPlayer" $component="fr.e
- sisar.icasa.cluedo.player.CluedoPlayer" }component { $classname="fr.e
- sisar.icasa.cluedo.plate.CluedoPlate" $name="CluedoPlate" requires { 
- $aggregate="true" $optional="true" $specification="fr.liglab.adele.ic
- asa.device.GenericDevice" $field="genericDevices" callback { $method=
- "bindGenericDevice" $type="bind" }callback { $method="unbindGenericDe
- vice" $type="unbind" }}requires { $aggregate="true" $optional="true" 
- $specification="fr.liglab.adele.icasa.simulator.Person" $field="perso
- ns" callback { $method="bindPerson" $type="bind" }callback { $method=
- "unbindPerson" $type="unbind" }}callback { $method="start" $transitio
- n="validate" }callback { $method="stop" $transition="invalidate" }pro
- vides { $specifications="fr.esisar.icasa.cluedo.plate.CluedoPlateServ
- ice" }manipulation { $classname="fr.esisar.icasa.cluedo.plate.CluedoP
- late" interface { $name="fr.liglab.adele.icasa.device.DeviceListener"
-  }interface { $name="fr.liglab.adele.icasa.simulator.listener.PersonL
- istener" }interface { $name="fr.esisar.icasa.cluedo.plate.CluedoPlate
- Service" }interface { $name="fr.esisar.icasa.cluedo.plate.CluedoComma
- ndService" }field { $name="crime" $type="fr.esisar.icasa.cluedo.commo
- n.Crime" }field { $name="gameStarted" $type="boolean" }field { $name=
- "genericDevices" $type="fr.liglab.adele.icasa.device.GenericDevice[]"
-  }field { $name="numberOfPlayers" $type="int" }field { $name="persons
- " $type="fr.liglab.adele.icasa.simulator.Person[]" }field { $name="pl
- ayers" $type="java.util.List" }field { $name="turn" $type="int" }meth
- od { $name="getNumberOfPlayers" $return="int" }method { $name="isGame
- Started" $return="boolean" }method { $name="setNumberOfPlayers" $argu
- ments="{int}" $names="{numberOfPlayers}" }method { $name="bindGeneric
- Device" $arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.
- util.Map}" $names="{genericDevice,properties}" }method { $name="unbin
- dGenericDevice" $arguments="{fr.liglab.adele.icasa.device.GenericDevi
- ce,java.util.Map}" $names="{genericDevice,properties}" }method { $nam
- e="bindPerson" $arguments="{fr.liglab.adele.icasa.simulator.Person,ja
- va.util.Map}" $names="{person,properties}" }method { $name="unbindPer
- son" $arguments="{fr.liglab.adele.icasa.simulator.Person,java.util.Ma
- p}" $names="{person,properties}" }method { $name="stop" }method { $na
- me="start" }method { $name="reset" }method { $name="devicePropertyMod
- ified" $arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.l
- ang.String,java.lang.Object,java.lang.Object}" $names="{device,proper
- tyName,oldValue,newValue}" }method { $name="getGenericDeviceFromLocat
- ion" $return="java.util.List" $arguments="{java.lang.String}" $names=
- "{location}" }method { $name="supposition" $return="fr.esisar.icasa.c
- luedo.common.Clue" $arguments="{fr.esisar.icasa.cluedo.common.Player,
- fr.esisar.icasa.cluedo.common.Crime}" $names="{player,supposition}" }
- method { $name="shuffle" }method { $name="register" $return="fr.esisa
- r.icasa.cluedo.common.Player" $arguments="{fr.esisar.icasa.cluedo.com
- mon.Person,java.lang.String}" $names="{person,name}" }method { $name=
- "AICanChoose" $return="boolean" }method { $name="myTurn" $return="boo
- lean" $arguments="{fr.esisar.icasa.cluedo.common.Player}" $names="{pl
- ayer}" }method { $name="deviceAdded" $arguments="{fr.liglab.adele.ica
- sa.device.GenericDevice}" $names="{arg0}" }method { $name="deviceEven
- t" $arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.
- Object}" $names="{arg0,arg1}" }method { $name="devicePropertyAdded" $
- arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.Stri
- ng}" $names="{arg0,arg1}" }method { $name="devicePropertyRemoved" $ar
- guments="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.String
- }" $names="{arg0,arg1}" }method { $name="deviceRemoved" $arguments="{
- fr.liglab.adele.icasa.device.GenericDevice}" $names="{arg0}" }method 
- { $name="personAdded" $arguments="{fr.liglab.adele.icasa.simulator.Pe
- rson}" $names="{arg0}" }method { $name="personDeviceAttached" $argume
- nts="{fr.liglab.adele.icasa.simulator.Person,fr.liglab.adele.icasa.lo
- cation.LocatedDevice}" $names="{arg0,arg1}" }method { $name="personDe
- viceDetached" $arguments="{fr.liglab.adele.icasa.simulator.Person,fr.
- liglab.adele.icasa.location.LocatedDevice}" $names="{arg0,arg1}" }met
- hod { $name="personMoved" $arguments="{fr.liglab.adele.icasa.simulato
- r.Person,fr.liglab.adele.icasa.location.Position}" $names="{arg0,arg1
- }" }method { $name="personRemoved" $arguments="{fr.liglab.adele.icasa
- .simulator.Person}" $names="{arg0}" }}}component { $classname="fr.esi
- sar.icasa.cluedo.player.CluedoPlayer" $name="CluedoPlayer" callback {
-  $method="start" $transition="validate" }callback { $method="stop" $t
- ransition="invalidate" }provides { $specifications="fr.esisar.icasa.c
- luedo.player.CluedoPlayerService" }requires { $specification="fr.esis
- ar.icasa.cluedo.plate.CluedoPlateService" $field="cluedoPlateService"
-  }manipulation { $classname="fr.esisar.icasa.cluedo.player.CluedoPlay
- er" interface { $name="fr.esisar.icasa.cluedo.player.CluedoPlayerServ
- ice" }field { $name="cluedoPlateService" $type="fr.esisar.icasa.clued
- o.plate.CluedoPlateService" }field { $name="me" $type="fr.esisar.icas
- a.cluedo.common.Player" }method { $name="stop" }method { $name="start
- " }method { $name="join" $arguments="{fr.esisar.icasa.cluedo.common.P
- erson,java.lang.String}" $names="{person,name}" }method { $name="getP
- layer" $return="fr.esisar.icasa.cluedo.common.Player" }method { $name
- ="AICanChoose" $return="boolean" }method { $name="myTurn" $return="bo
- olean" }method { $name="isGameStarted" $return="boolean" }}}component
-  { $classname="fr.esisar.icasa.cluedo.player.CluedoAI" $name="CluedoA
- i" callback { $method="start" $transition="validate" }callback { $met
- hod="stop" $transition="invalidate" }requires { $specification="fr.es
- isar.icasa.cluedo.plate.CluedoPlateService" $field="cluedoPlateServic
- e" }manipulation { $classname="fr.esisar.icasa.cluedo.player.CluedoAI
- " field { $name="SLEEP_TIME" $type="int" }field { $name="cluedoPlateS
- ervice" $type="fr.esisar.icasa.cluedo.plate.CluedoPlateService" }fiel
- d { $name="me" $type="fr.esisar.icasa.cluedo.common.Player" }field { 
- $name="t" $type="java.lang.Thread" }method { $name="stop" }method { $
- name="start" }method { $name="play" }method { $name="sleep" }inner { 
- $name="1" method { $name="run" }}}}component { $name="fr.esisar.icasa
- .cluedo.command.CluedoPlayerCommand" $classname="fr.esisar.icasa.clue
- do.command.CluedoPlayerCommand" fr.liglab.adele.icasa.command.handler
- :commandprovider { $namespace="cluedo" fr.liglab.adele.icasa.command.
- handler:command { $method="join" }fr.liglab.adele.icasa.command.handl
- er:command { $method="getPlayer" }}requires { $field="cluedoPlayerSer
- vice" }manipulation { $classname="fr.esisar.icasa.cluedo.command.Clue
- doPlayerCommand" field { $name="cluedoPlayerService" $type="fr.esisar
- .icasa.cluedo.player.CluedoPlayerService" }method { $name="stop" }met
- hod { $name="start" }method { $name="join" $arguments="{java.lang.Str
- ing}" $names="{person}" }method { $name="getPlayer" }}}component { $n
- ame="fr.esisar.icasa.cluedo.plate.CluedoPlate" $classname="fr.esisar.
- icasa.cluedo.plate.CluedoPlate" fr.liglab.adele.icasa.command.handler
- :commandprovider { $namespace="cluedo" }manipulation { $classname="fr
- .esisar.icasa.cluedo.plate.CluedoPlate" interface { $name="fr.liglab.
- adele.icasa.device.DeviceListener" }interface { $name="fr.liglab.adel
- e.icasa.simulator.listener.PersonListener" }interface { $name="fr.esi
- sar.icasa.cluedo.plate.CluedoPlateService" }interface { $name="fr.esi
- sar.icasa.cluedo.plate.CluedoCommandService" }field { $name="crime" $
- type="fr.esisar.icasa.cluedo.common.Crime" }field { $name="gameStarte
- d" $type="boolean" }field { $name="genericDevices" $type="fr.liglab.a
- dele.icasa.device.GenericDevice[]" }field { $name="numberOfPlayers" $
- type="int" }field { $name="persons" $type="fr.liglab.adele.icasa.simu
- lator.Person[]" }field { $name="players" $type="java.util.List" }fiel
- d { $name="turn" $type="int" }method { $name="getNumberOfPlayers" $re
- turn="int" }method { $name="isGameStarted" $return="boolean" }method 
- { $name="setNumberOfPlayers" $arguments="{int}" $names="{numberOfPlay
- ers}" }method { $name="bindGenericDevice" $arguments="{fr.liglab.adel
- e.icasa.device.GenericDevice,java.util.Map}" $names="{genericDevice,p
- roperties}" }method { $name="unbindGenericDevice" $arguments="{fr.lig
- lab.adele.icasa.device.GenericDevice,java.util.Map}" $names="{generic
- Device,properties}" }method { $name="bindPerson" $arguments="{fr.ligl
- ab.adele.icasa.simulator.Person,java.util.Map}" $names="{person,prope
- rties}" }method { $name="unbindPerson" $arguments="{fr.liglab.adele.i
- casa.simulator.Person,java.util.Map}" $names="{person,properties}" }m
- ethod { $name="stop" }method { $name="start" }method { $name="reset" 
- }method { $name="devicePropertyModified" $arguments="{fr.liglab.adele
- .icasa.device.GenericDevice,java.lang.String,java.lang.Object,java.la
- ng.Object}" $names="{device,propertyName,oldValue,newValue}" }method 
- { $name="getGenericDeviceFromLocation" $return="java.util.List" $argu
- ments="{java.lang.String}" $names="{location}" }method { $name="suppo
- sition" $return="fr.esisar.icasa.cluedo.common.Clue" $arguments="{fr.
- esisar.icasa.cluedo.common.Player,fr.esisar.icasa.cluedo.common.Crime
- }" $names="{player,supposition}" }method { $name="shuffle" }method { 
- $name="register" $return="fr.esisar.icasa.cluedo.common.Player" $argu
- ments="{fr.esisar.icasa.cluedo.common.Person,java.lang.String}" $name
- s="{person,name}" }method { $name="AICanChoose" $return="boolean" }me
- thod { $name="myTurn" $return="boolean" $arguments="{fr.esisar.icasa.
- cluedo.common.Player}" $names="{player}" }method { $name="deviceAdded
- " $arguments="{fr.liglab.adele.icasa.device.GenericDevice}" $names="{
- arg0}" }method { $name="deviceEvent" $arguments="{fr.liglab.adele.ica
- sa.device.GenericDevice,java.lang.Object}" $names="{arg0,arg1}" }meth
- od { $name="devicePropertyAdded" $arguments="{fr.liglab.adele.icasa.d
- evice.GenericDevice,java.lang.String}" $names="{arg0,arg1}" }method {
-  $name="devicePropertyRemoved" $arguments="{fr.liglab.adele.icasa.dev
- ice.GenericDevice,java.lang.String}" $names="{arg0,arg1}" }method { $
- name="deviceRemoved" $arguments="{fr.liglab.adele.icasa.device.Generi
- cDevice}" $names="{arg0}" }method { $name="personAdded" $arguments="{
- fr.liglab.adele.icasa.simulator.Person}" $names="{arg0}" }method { $n
- ame="personDeviceAttached" $arguments="{fr.liglab.adele.icasa.simulat
- or.Person,fr.liglab.adele.icasa.location.LocatedDevice}" $names="{arg
- 0,arg1}" }method { $name="personDeviceDetached" $arguments="{fr.ligla
- b.adele.icasa.simulator.Person,fr.liglab.adele.icasa.location.Located
- Device}" $names="{arg0,arg1}" }method { $name="personMoved" $argument
- s="{fr.liglab.adele.icasa.simulator.Person,fr.liglab.adele.icasa.loca
- tion.Position}" $names="{arg0,arg1}" }method { $name="personRemoved" 
- $arguments="{fr.liglab.adele.icasa.simulator.Person}" $names="{arg0}"
-  }}}component { $name="fr.esisar.icasa.cluedo.player.CluedoAI" $class
- name="fr.esisar.icasa.cluedo.player.CluedoAI" fr.liglab.adele.icasa.c
- ommand.handler:commandprovider { $namespace="cluedo" }manipulation { 
+ ponent="CluedoAi" $name="CluedoAi-3" }instance { $component="CluedoPl
+ ate" $name="CluedoPlate" }instance { $component="CluedoAi" $name="Clu
+ edoAi-4" }instance { $name="CluedoPlayerCommand" $component="fr.esisa
+ r.icasa.cluedo.command.CluedoPlayerCommand" }component { $classname="
+ fr.esisar.icasa.cluedo.plate.CluedoPlate" $name="CluedoPlate" require
+ s { $aggregate="true" $optional="true" $specification="fr.liglab.adel
+ e.icasa.device.GenericDevice" $field="genericDevices" callback { $met
+ hod="bindGenericDevice" $type="bind" }callback { $method="unbindGener
+ icDevice" $type="unbind" }}requires { $aggregate="true" $optional="tr
+ ue" $specification="fr.liglab.adele.icasa.simulator.Person" $field="p
+ ersons" callback { $method="bindPerson" $type="bind" }callback { $met
+ hod="unbindPerson" $type="unbind" }}callback { $method="start" $trans
+ ition="validate" }callback { $method="stop" $transition="invalidate" 
+ }provides { $specifications="fr.esisar.icasa.cluedo.plate.CluedoPlate
+ Service" }manipulation { $classname="fr.esisar.icasa.cluedo.plate.Clu
+ edoPlate" interface { $name="fr.liglab.adele.icasa.device.DeviceListe
+ ner" }interface { $name="fr.liglab.adele.icasa.simulator.listener.Per
+ sonListener" }interface { $name="fr.esisar.icasa.cluedo.plate.CluedoP
+ lateService" }interface { $name="fr.esisar.icasa.cluedo.plate.CluedoC
+ ommandService" }field { $name="crime" $type="fr.esisar.icasa.cluedo.c
+ ommon.Crime" }field { $name="decks" $type="java.util.List" }field { $
+ name="gameStarted" $type="boolean" }field { $name="genericDevices" $t
+ ype="fr.liglab.adele.icasa.device.GenericDevice[]" }field { $name="nu
+ mberOfPlayers" $type="int" }field { $name="persons" $type="fr.liglab.
+ adele.icasa.simulator.Person[]" }field { $name="players" $type="java.
+ util.List" }field { $name="turn" $type="int" }method { $name="getNumb
+ erOfPlayers" $return="int" }method { $name="isGameStarted" $return="b
+ oolean" }method { $name="setNumberOfPlayers" $arguments="{int}" $name
+ s="{numberOfPlayers}" }method { $name="bindGenericDevice" $arguments=
+ "{fr.liglab.adele.icasa.device.GenericDevice,java.util.Map}" $names="
+ {genericDevice,properties}" }method { $name="unbindGenericDevice" $ar
+ guments="{fr.liglab.adele.icasa.device.GenericDevice,java.util.Map}" 
+ $names="{genericDevice,properties}" }method { $name="bindPerson" $arg
+ uments="{fr.liglab.adele.icasa.simulator.Person,java.util.Map}" $name
+ s="{person,properties}" }method { $name="unbindPerson" $arguments="{f
+ r.liglab.adele.icasa.simulator.Person,java.util.Map}" $names="{person
+ ,properties}" }method { $name="stop" }method { $name="start" }method 
+ { $name="reset" }method { $name="devicePropertyModified" $arguments="
+ {fr.liglab.adele.icasa.device.GenericDevice,java.lang.String,java.lan
+ g.Object,java.lang.Object}" $names="{device,propertyName,oldValue,new
+ Value}" }method { $name="getGenericDeviceFromLocation" $return="java.
+ util.List" $arguments="{java.lang.String}" $names="{location}" }metho
+ d { $name="supposition" $return="fr.esisar.icasa.cluedo.common.Clue" 
+ $arguments="{fr.esisar.icasa.cluedo.common.Player,fr.esisar.icasa.clu
+ edo.common.Crime}" $names="{player,supposition}" }method { $name="shu
+ ffle" }method { $name="register" $return="fr.esisar.icasa.cluedo.comm
+ on.Player" $arguments="{fr.esisar.icasa.cluedo.common.Person,java.lan
+ g.String}" $names="{person,name}" }method { $name="AICanChoose" $retu
+ rn="boolean" }method { $name="myTurn" $return="boolean" $arguments="{
+ fr.esisar.icasa.cluedo.common.Player}" $names="{player}" }method { $n
+ ame="deviceAdded" $arguments="{fr.liglab.adele.icasa.device.GenericDe
+ vice}" $names="{arg0}" }method { $name="deviceEvent" $arguments="{fr.
+ liglab.adele.icasa.device.GenericDevice,java.lang.Object}" $names="{a
+ rg0,arg1}" }method { $name="devicePropertyAdded" $arguments="{fr.ligl
+ ab.adele.icasa.device.GenericDevice,java.lang.String}" $names="{arg0,
+ arg1}" }method { $name="devicePropertyRemoved" $arguments="{fr.liglab
+ .adele.icasa.device.GenericDevice,java.lang.String}" $names="{arg0,ar
+ g1}" }method { $name="deviceRemoved" $arguments="{fr.liglab.adele.ica
+ sa.device.GenericDevice}" $names="{arg0}" }method { $name="personAdde
+ d" $arguments="{fr.liglab.adele.icasa.simulator.Person}" $names="{arg
+ 0}" }method { $name="personDeviceAttached" $arguments="{fr.liglab.ade
+ le.icasa.simulator.Person,fr.liglab.adele.icasa.location.LocatedDevic
+ e}" $names="{arg0,arg1}" }method { $name="personDeviceDetached" $argu
+ ments="{fr.liglab.adele.icasa.simulator.Person,fr.liglab.adele.icasa.
+ location.LocatedDevice}" $names="{arg0,arg1}" }method { $name="person
+ Moved" $arguments="{fr.liglab.adele.icasa.simulator.Person,fr.liglab.
+ adele.icasa.location.Position}" $names="{arg0,arg1}" }method { $name=
+ "personRemoved" $arguments="{fr.liglab.adele.icasa.simulator.Person}"
+  $names="{arg0}" }}}component { $classname="fr.esisar.icasa.cluedo.pl
+ ayer.CluedoPlayer" $name="CluedoPlayer" callback { $method="start" $t
+ ransition="validate" }callback { $method="stop" $transition="invalida
+ te" }provides { $specifications="fr.esisar.icasa.cluedo.player.Cluedo
+ PlayerService" }requires { $specification="fr.esisar.icasa.cluedo.pla
+ te.CluedoPlateService" $field="cluedoPlateService" }manipulation { $c
+ lassname="fr.esisar.icasa.cluedo.player.CluedoPlayer" interface { $na
+ me="fr.esisar.icasa.cluedo.player.CluedoPlayerService" }field { $name
+ ="cluedoPlateService" $type="fr.esisar.icasa.cluedo.plate.CluedoPlate
+ Service" }field { $name="me" $type="fr.esisar.icasa.cluedo.common.Pla
+ yer" }method { $name="stop" }method { $name="start" }method { $name="
+ join" $arguments="{fr.esisar.icasa.cluedo.common.Person,java.lang.Str
+ ing}" $names="{person,name}" }method { $name="getPlayer" $return="fr.
+ esisar.icasa.cluedo.common.Player" }method { $name="AICanChoose" $ret
+ urn="boolean" }method { $name="myTurn" $return="boolean" }method { $n
+ ame="isGameStarted" $return="boolean" }}}component { $classname="fr.e
+ sisar.icasa.cluedo.player.CluedoAI" $name="CluedoAi" callback { $meth
+ od="start" $transition="validate" }callback { $method="stop" $transit
+ ion="invalidate" }requires { $specification="fr.esisar.icasa.cluedo.p
+ late.CluedoPlateService" $field="cluedoPlateService" }manipulation { 
  $classname="fr.esisar.icasa.cluedo.player.CluedoAI" field { $name="SL
  EEP_TIME" $type="int" }field { $name="cluedoPlateService" $type="fr.e
  sisar.icasa.cluedo.plate.CluedoPlateService" }field { $name="me" $typ
  e="fr.esisar.icasa.cluedo.common.Player" }field { $name="t" $type="ja
  va.lang.Thread" }method { $name="stop" }method { $name="start" }metho
  d { $name="play" }method { $name="sleep" }inner { $name="1" method { 
- $name="run" }}}}component { $name="fr.esisar.icasa.cluedo.player.Clue
- doPlayer" $classname="fr.esisar.icasa.cluedo.player.CluedoPlayer" fr.
- liglab.adele.icasa.command.handler:commandprovider { $namespace="clue
- do" }manipulation { $classname="fr.esisar.icasa.cluedo.player.CluedoP
- layer" interface { $name="fr.esisar.icasa.cluedo.player.CluedoPlayerS
- ervice" }field { $name="cluedoPlateService" $type="fr.esisar.icasa.cl
- uedo.plate.CluedoPlateService" }field { $name="me" $type="fr.esisar.i
- casa.cluedo.common.Player" }method { $name="stop" }method { $name="st
- art" }method { $name="join" $arguments="{fr.esisar.icasa.cluedo.commo
- n.Person,java.lang.String}" $names="{person,name}" }method { $name="g
- etPlayer" $return="fr.esisar.icasa.cluedo.common.Player" }method { $n
- ame="AICanChoose" $return="boolean" }method { $name="myTurn" $return=
- "boolean" }method { $name="isGameStarted" $return="boolean" }}}
+ $name="run" }}}}component { $name="fr.esisar.icasa.cluedo.command.Clu
+ edoPlayerCommand" $classname="fr.esisar.icasa.cluedo.command.CluedoPl
+ ayerCommand" fr.liglab.adele.icasa.command.handler:commandprovider { 
+ $namespace="cluedo" fr.liglab.adele.icasa.command.handler:command { $
+ method="join" }fr.liglab.adele.icasa.command.handler:command { $metho
+ d="getPlayer" }}requires { $field="cluedoPlayerService" }manipulation
+  { $classname="fr.esisar.icasa.cluedo.command.CluedoPlayerCommand" fi
+ eld { $name="cluedoPlayerService" $type="fr.esisar.icasa.cluedo.playe
+ r.CluedoPlayerService" }method { $name="stop" }method { $name="start"
+  }method { $name="join" $arguments="{java.lang.String}" $names="{pers
+ on}" }method { $name="getPlayer" }}}component { $name="fr.esisar.icas
+ a.cluedo.plate.CluedoPlate" $classname="fr.esisar.icasa.cluedo.plate.
+ CluedoPlate" fr.liglab.adele.icasa.command.handler:commandprovider { 
+ $namespace="cluedo" }manipulation { $classname="fr.esisar.icasa.clued
+ o.plate.CluedoPlate" interface { $name="fr.liglab.adele.icasa.device.
+ DeviceListener" }interface { $name="fr.liglab.adele.icasa.simulator.l
+ istener.PersonListener" }interface { $name="fr.esisar.icasa.cluedo.pl
+ ate.CluedoPlateService" }interface { $name="fr.esisar.icasa.cluedo.pl
+ ate.CluedoCommandService" }field { $name="crime" $type="fr.esisar.ica
+ sa.cluedo.common.Crime" }field { $name="decks" $type="java.util.List"
+  }field { $name="gameStarted" $type="boolean" }field { $name="generic
+ Devices" $type="fr.liglab.adele.icasa.device.GenericDevice[]" }field 
+ { $name="numberOfPlayers" $type="int" }field { $name="persons" $type=
+ "fr.liglab.adele.icasa.simulator.Person[]" }field { $name="players" $
+ type="java.util.List" }field { $name="turn" $type="int" }method { $na
+ me="getNumberOfPlayers" $return="int" }method { $name="isGameStarted"
+  $return="boolean" }method { $name="setNumberOfPlayers" $arguments="{
+ int}" $names="{numberOfPlayers}" }method { $name="bindGenericDevice" 
+ $arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.util.Map
+ }" $names="{genericDevice,properties}" }method { $name="unbindGeneric
+ Device" $arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.
+ util.Map}" $names="{genericDevice,properties}" }method { $name="bindP
+ erson" $arguments="{fr.liglab.adele.icasa.simulator.Person,java.util.
+ Map}" $names="{person,properties}" }method { $name="unbindPerson" $ar
+ guments="{fr.liglab.adele.icasa.simulator.Person,java.util.Map}" $nam
+ es="{person,properties}" }method { $name="stop" }method { $name="star
+ t" }method { $name="reset" }method { $name="devicePropertyModified" $
+ arguments="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.Stri
+ ng,java.lang.Object,java.lang.Object}" $names="{device,propertyName,o
+ ldValue,newValue}" }method { $name="getGenericDeviceFromLocation" $re
+ turn="java.util.List" $arguments="{java.lang.String}" $names="{locati
+ on}" }method { $name="supposition" $return="fr.esisar.icasa.cluedo.co
+ mmon.Clue" $arguments="{fr.esisar.icasa.cluedo.common.Player,fr.esisa
+ r.icasa.cluedo.common.Crime}" $names="{player,supposition}" }method {
+  $name="shuffle" }method { $name="register" $return="fr.esisar.icasa.
+ cluedo.common.Player" $arguments="{fr.esisar.icasa.cluedo.common.Pers
+ on,java.lang.String}" $names="{person,name}" }method { $name="AICanCh
+ oose" $return="boolean" }method { $name="myTurn" $return="boolean" $a
+ rguments="{fr.esisar.icasa.cluedo.common.Player}" $names="{player}" }
+ method { $name="deviceAdded" $arguments="{fr.liglab.adele.icasa.devic
+ e.GenericDevice}" $names="{arg0}" }method { $name="deviceEvent" $argu
+ ments="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.Object}"
+  $names="{arg0,arg1}" }method { $name="devicePropertyAdded" $argument
+ s="{fr.liglab.adele.icasa.device.GenericDevice,java.lang.String}" $na
+ mes="{arg0,arg1}" }method { $name="devicePropertyRemoved" $arguments=
+ "{fr.liglab.adele.icasa.device.GenericDevice,java.lang.String}" $name
+ s="{arg0,arg1}" }method { $name="deviceRemoved" $arguments="{fr.ligla
+ b.adele.icasa.device.GenericDevice}" $names="{arg0}" }method { $name=
+ "personAdded" $arguments="{fr.liglab.adele.icasa.simulator.Person}" $
+ names="{arg0}" }method { $name="personDeviceAttached" $arguments="{fr
+ .liglab.adele.icasa.simulator.Person,fr.liglab.adele.icasa.location.L
+ ocatedDevice}" $names="{arg0,arg1}" }method { $name="personDeviceDeta
+ ched" $arguments="{fr.liglab.adele.icasa.simulator.Person,fr.liglab.a
+ dele.icasa.location.LocatedDevice}" $names="{arg0,arg1}" }method { $n
+ ame="personMoved" $arguments="{fr.liglab.adele.icasa.simulator.Person
+ ,fr.liglab.adele.icasa.location.Position}" $names="{arg0,arg1}" }meth
+ od { $name="personRemoved" $arguments="{fr.liglab.adele.icasa.simulat
+ or.Person}" $names="{arg0}" }}}component { $name="fr.esisar.icasa.clu
+ edo.player.CluedoAI" $classname="fr.esisar.icasa.cluedo.player.Cluedo
+ AI" fr.liglab.adele.icasa.command.handler:commandprovider { $namespac
+ e="cluedo" }manipulation { $classname="fr.esisar.icasa.cluedo.player.
+ CluedoAI" field { $name="SLEEP_TIME" $type="int" }field { $name="clue
+ doPlateService" $type="fr.esisar.icasa.cluedo.plate.CluedoPlateServic
+ e" }field { $name="me" $type="fr.esisar.icasa.cluedo.common.Player" }
+ field { $name="t" $type="java.lang.Thread" }method { $name="stop" }me
+ thod { $name="start" }method { $name="play" }method { $name="sleep" }
+ inner { $name="1" method { $name="run" }}}}component { $name="fr.esis
+ ar.icasa.cluedo.player.CluedoPlayer" $classname="fr.esisar.icasa.clue
+ do.player.CluedoPlayer" fr.liglab.adele.icasa.command.handler:command
+ provider { $namespace="cluedo" }manipulation { $classname="fr.esisar.
+ icasa.cluedo.player.CluedoPlayer" interface { $name="fr.esisar.icasa.
+ cluedo.player.CluedoPlayerService" }field { $name="cluedoPlateService
+ " $type="fr.esisar.icasa.cluedo.plate.CluedoPlateService" }field { $n
+ ame="me" $type="fr.esisar.icasa.cluedo.common.Player" }method { $name
+ ="stop" }method { $name="start" }method { $name="join" $arguments="{f
+ r.esisar.icasa.cluedo.common.Person,java.lang.String}" $names="{perso
+ n,name}" }method { $name="getPlayer" $return="fr.esisar.icasa.cluedo.
+ common.Player" }method { $name="AICanChoose" $return="boolean" }metho
+ d { $name="myTurn" $return="boolean" }method { $name="isGameStarted" 
+ $return="boolean" }}}
 

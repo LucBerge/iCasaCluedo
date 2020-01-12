@@ -1,7 +1,13 @@
 package fr.esisar.icasa.cluedo.player;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.felix.ipojo.annotations.Component;
 
+import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
@@ -50,16 +56,17 @@ public class CluedoAI {
 		for(Person person:Person.ALL) {
 			try {
 				me = cluedoPlateService.register(person, "AI");
+				break;
 			} catch (Exception e) {}
 		}
 		
 		//If the AI can play
 		if(me != null) {
-			
+
 			//Wait for the game to start
 			while (!cluedoPlateService.isGameStarted()) {sleep();}
 
-			//While no finished
+			//While not finished
 			while (cluedoPlateService.isGameStarted()) {
 
 				//Wait for his turn
@@ -67,7 +74,27 @@ public class CluedoAI {
 
 				//Make a supposition
 				try {
-					Crime supposition = new Crime(Person.COLONEL_MOUTARDE, Weapon.LAMPE, Room.BUREAU);
+					//Init
+					List<Card> suffledPersons = new ArrayList<Card>();
+					List<Card> suffledWeapons = new ArrayList<Card>();
+					List<Card> suffledRooms = new ArrayList<Card>();
+
+					//Add
+					suffledPersons.addAll(Arrays.asList(Person.ALL));
+					suffledWeapons.addAll(Arrays.asList(Weapon.ALL));
+					suffledRooms.addAll(Arrays.asList(Room.ALL));
+
+					//Shuffle
+					Collections.shuffle(suffledPersons);
+					Collections.shuffle(suffledWeapons);
+					Collections.shuffle(suffledRooms);
+
+					//Pick 1 each
+					Card person = suffledPersons.get(0);
+					Card weapon = suffledWeapons.get(0);
+					Card room = suffledRooms.get(0);
+					
+					Crime supposition = new Crime(person, weapon, room);
 					cluedoPlateService.supposition(me, supposition);
 				} catch (Exception e) {
 				}

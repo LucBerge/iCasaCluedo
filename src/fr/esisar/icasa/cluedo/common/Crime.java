@@ -1,28 +1,30 @@
 package fr.esisar.icasa.cluedo.common;
 
-import fr.esisar.icasa.cluedo.common.Card;
-
 public class Crime {
-	private Card person;
-	private Card weapon;
-	private Card room;
+	private Person person;
+	private Weapon weapon;
+	private Room room;
+
+	public static Crime getRandom() {
+		return new Crime(Person.getRandom(), Weapon.getRandom(), Room.getRandom());
+	}
 	
-	public Crime(Card person, Card weapon, Card room) {
+	public Crime(Person person, Weapon weapon, Room room) {
 		super();
 		this.person = person;
 		this.weapon = weapon;
 		this.room = room;
 	}
 
-	public Card getPerson() {
+	public Person getPerson() {
 		return person;
 	}
 
-	public Card getWeapon() {
+	public Weapon getWeapon() {
 		return weapon;
 	}
 
-	public Card getRoom() {
+	public Room getRoom() {
 		return room;
 	}
 

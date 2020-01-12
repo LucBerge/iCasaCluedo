@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.felix.ipojo.annotations.Component;
-import org.apache.felix.ipojo.annotations.Instantiate;
 
 import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Clue;
@@ -15,6 +14,7 @@ import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.common.Room;
+import fr.esisar.icasa.cluedo.common.Supposition;
 import fr.esisar.icasa.cluedo.common.Weapon;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.device.DeviceListener;
@@ -95,25 +95,25 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	/** Bind Method for presenceSensors dependency */
-	public synchronized void bindGenericDevice(GenericDevice genericDevice, Map properties) {
+	public synchronized void bindGenericDevice(GenericDevice genericDevice, Map<String, String> properties) {
 		System.out.println("Bind weapon " + genericDevice.getSerialNumber());
 		genericDevice.addListener(this);
 	}
 
 	/** Unbind Method for presenceSensors dependency */
-	public synchronized void unbindGenericDevice(GenericDevice genericDevice, Map properties) {
+	public synchronized void unbindGenericDevice(GenericDevice genericDevice, Map<String, String> properties) {
 		System.out.println("Unbind weapon " + genericDevice.getSerialNumber());
 		genericDevice.removeListener(this);
 	}
 
 	/** Bind Method for persons dependency */
-	public synchronized void bindPerson(fr.liglab.adele.icasa.simulator.Person person, Map properties) {
+	public synchronized void bindPerson(fr.liglab.adele.icasa.simulator.Person person, Map<String, String> properties) {
 		System.out.println("Bind person " + person.getName());
 		person.addListener(this);
 	}
 
 	/** Unbind Method for persons dependency */
-	public synchronized void unbindPerson(fr.liglab.adele.icasa.simulator.Person person, Map properties) {
+	public synchronized void unbindPerson(fr.liglab.adele.icasa.simulator.Person person, Map<String, String> properties) {
 		System.out.println("Unbind person " + person.getName());
 		person.removeListener(this);
 	}
@@ -174,27 +174,26 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	@Override
-	public synchronized Clue supposition(Player player, Crime supposition) throws Exception {
-		if (!players.get(turn).equals(player))
+	public synchronized Clue supposition(Supposition supposition) throws Exception {
+		if (!players.get(turn).equals(supposition.getPlayer()))
 			throw new Exception("Ce n'est pas à vous de jouer.");
 
 		Clue clue = null;
-		System.out.println(player.getName() + " fait la supposition que " + supposition.getPerson() + " a tué avec " + supposition.getWeapon() + " dans le/la " + supposition.getRoom());
-
 		System.out.println(supposition);
-		if (crime.equals(supposition)) {
-			System.out.println(player.getName() + "a gagné !!!");
+
+		if (crime.equals(supposition.getCrime())) {
+			System.out.println(supposition.getPlayer().getName() + " a gagné !!!");
 			reset();
 		} else {
 			for (int i = 0; i < turn; i++) {
-				clue = players.get(i).getClue(supposition);
+				clue = players.get(i).getClue(supposition.getCrime());
 				if (clue != null) {
 					break;
 				}
 			}
 			if (clue == null) {
 				for (int i = turn + 1; i < players.size(); i++) {
-					clue = players.get(i).getClue(supposition);
+					clue = players.get(i).getClue(supposition.getCrime());
 					if (clue != null) {
 						break;
 					}
@@ -216,47 +215,29 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	private void shuffle() {
-
-		//Init
-		List<Card> suffledPersons = new ArrayList<Card>();
-		List<Card> suffledWeapons = new ArrayList<Card>();
-		List<Card> suffledRooms = new ArrayList<Card>();
-		List<Card> shuffledCards = new ArrayList<Card>();
-
-		//Add
-		suffledPersons.addAll(Arrays.asList(CARDS_PERSONS));
-		suffledWeapons.addAll(Arrays.asList(CARDS_WEAPONS));
-		suffledRooms.addAll(Arrays.asList(CARDS_ROOMS));
-
-		//Shuffle
-		Collections.shuffle(suffledPersons);
-		Collections.shuffle(suffledWeapons);
-		Collections.shuffle(suffledRooms);
-
-		//Pick 1 each
-		Card person = suffledPersons.get(0);
-		Card weapon = suffledWeapons.get(0);
-		Card room = suffledRooms.get(0);
-		crime = new Crime(person, weapon, room);
+		
+		//Get a random crime
+		crime = Crime.getRandom();
 		System.out.println(crime);
-		suffledPersons.remove(0);
-		suffledWeapons.remove(0);
-		suffledRooms.remove(0);
-
-		//Merge
-		shuffledCards.addAll(suffledPersons);
-		shuffledCards.addAll(suffledWeapons);
-		shuffledCards.addAll(suffledRooms);
-
-		//Shuffle all
-		Collections.shuffle(shuffledCards);
-
+		
+		//Init
+		List<Card> deck = new ArrayList<Card>();
+		deck.addAll(Arrays.asList(CARDS_PERSONS));
+		deck.addAll(Arrays.asList(CARDS_WEAPONS));
+		deck.addAll(Arrays.asList(CARDS_ROOMS));
+		
+		deck.remove(crime.getPerson());
+		deck.remove(crime.getWeapon());
+		deck.remove(crime.getRoom());
+		
+		Collections.shuffle(deck);
+		
 		//Distribute
 		int i = 0;
 		for (Player player : players) {
 			int j = 0;
-			while (i + j < shuffledCards.size()) {
-				player.getCards().add(shuffledCards.get(i + j));
+			while (i + j < deck.size()) {
+				player.getCards().add(deck.get(i + j));
 				j += numberOfPlayers;
 			}
 			i++;
@@ -286,7 +267,6 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public synchronized boolean AICanChoose() {
-		//return true;
 		return players.size() > 0;
 	}
 
@@ -335,18 +315,15 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public void personDeviceDetached(fr.liglab.adele.icasa.simulator.Person arg0, LocatedDevice arg1) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void personMoved(fr.liglab.adele.icasa.simulator.Person arg0, Position arg1) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void personRemoved(fr.liglab.adele.icasa.simulator.Person arg0) {
 		// TODO Auto-generated method stub
-
 	}
 }

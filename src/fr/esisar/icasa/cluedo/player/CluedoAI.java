@@ -1,18 +1,11 @@
 package fr.esisar.icasa.cluedo.player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.apache.felix.ipojo.annotations.Component;
 
-import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
-import fr.esisar.icasa.cluedo.common.Room;
-import fr.esisar.icasa.cluedo.common.Weapon;
+import fr.esisar.icasa.cluedo.common.Supposition;
 import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 
@@ -49,18 +42,21 @@ public class CluedoAI {
 		t.start();
 	}
 
-	public void play() throws InterruptedException {
+	private void play() throws InterruptedException {
 		//Wait for the player selection
 		while (!cluedoPlateService.AICanChoose()) {
 			sleep();
 		}
 
 		//Selection
+		int index = 1;
 		for (Person person : Person.ALL) {
 			try {
-				me = cluedoPlateService.register(person, "AI");
+				me = cluedoPlateService.register(person, "IA " + index);
 				break;
-			} catch (Exception e) {}
+			} catch (Exception e) {
+				index++;
+			}
 		}
 
 		//If the AI can play
@@ -76,45 +72,28 @@ public class CluedoAI {
 				while (cluedoPlateService.isGameStarted()) {
 	
 					//Wait for his turn
-						while (!cluedoPlateService.myTurn(me)) {
-							sleep();
-						}
+					while (!cluedoPlateService.myTurn(me)) {
+						sleep();
+					}
 	
 					//Make a supposition
-					try {
-						//Init
-						List<Card> suffledPersons = new ArrayList<Card>();
-						List<Card> suffledWeapons = new ArrayList<Card>();
-						List<Card> suffledRooms = new ArrayList<Card>();
-	
-						//Add
-						suffledPersons.addAll(Arrays.asList(Person.ALL));
-						suffledWeapons.addAll(Arrays.asList(Weapon.ALL));
-						suffledRooms.addAll(Arrays.asList(Room.ALL));
-	
-						//Shuffle
-						Collections.shuffle(suffledPersons);
-						Collections.shuffle(suffledWeapons);
-						Collections.shuffle(suffledRooms);
-	
-						//Pick 1 each
-						Card person = suffledPersons.get(0);
-						Card weapon = suffledWeapons.get(0);
-						Card room = suffledRooms.get(0);
-	
-						Crime supposition = new Crime(person, weapon, room);
-						cluedoPlateService.supposition(me, supposition);
+					try {	
+						cluedoPlateService.supposition(suppose());
 					} catch (Exception e) {}
 				}
 			} catch (Exception e1) {}
 		}
 	}
 
+	private Supposition suppose() {
+		return new Supposition(me, Crime.getRandom());
+	}
+	
 	/** 
 	 * Force the thread to sleep.
 	 * @throws InterruptedException if the thread is interrupted.
 	 */
-	public void sleep() throws InterruptedException {
+	private void sleep() throws InterruptedException {
 		Thread.sleep(SLEEP_TIME);
 	}
 }

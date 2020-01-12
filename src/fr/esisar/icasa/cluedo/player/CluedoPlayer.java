@@ -5,6 +5,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
+import fr.esisar.icasa.cluedo.common.Supposition;
 import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 
@@ -36,7 +37,7 @@ public class CluedoPlayer implements CluedoPlayerService {
 
 	@Override
 	public void suppose(Crime supposition) throws Exception {
-		cluedoPlateService.supposition(me, supposition);
+		cluedoPlateService.supposition(new Supposition(me, supposition));
 	}
 	
 	@Override

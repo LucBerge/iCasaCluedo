@@ -1,9 +1,9 @@
 package fr.esisar.icasa.cluedo.plate;
 
 import fr.esisar.icasa.cluedo.common.Clue;
-import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
+import fr.esisar.icasa.cluedo.common.Supposition;
 
 public interface CluedoPlateService {
     /**
@@ -32,10 +32,9 @@ public interface CluedoPlateService {
 	boolean isGameStarted();
 
 	/**
-	 * @param player
 	 * @param supposition
 	 * @return
 	 * @throws Exception
 	 */
-	Clue supposition(Player player, Crime supposition) throws Exception;
+	Clue supposition(Supposition supposition) throws Exception;
 }

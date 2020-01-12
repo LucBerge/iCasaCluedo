@@ -1,6 +1,6 @@
 package fr.esisar.icasa.cluedo.common;
 
-public class Card {
+public abstract class Card {
 
     /**
      * The corresponding name

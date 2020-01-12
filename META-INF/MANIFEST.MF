@@ -90,7 +90,7 @@ iPOJO-Components: instance { $component="CluedoAi" $name="CluedoAi-1"
  tyName,oldValue,newValue}" }method { $name="getGenericDeviceFromLocat
  ion" $return="java.util.List" $arguments="{java.lang.String}" $names=
  "{location}" }method { $name="supposition" $return="fr.esisar.icasa.c
- luedo.common.Card" $arguments="{fr.esisar.icasa.cluedo.common.Player,
+ luedo.common.Clue" $arguments="{fr.esisar.icasa.cluedo.common.Player,
  fr.esisar.icasa.cluedo.common.Crime}" $names="{player,supposition}" }
  method { $name="shuffle" }method { $name="register" $return="fr.esisa
  r.icasa.cluedo.common.Player" $arguments="{fr.esisar.icasa.cluedo.com
@@ -182,7 +182,7 @@ iPOJO-Components: instance { $component="CluedoAi" $name="CluedoAi-1"
  ng.Object}" $names="{device,propertyName,oldValue,newValue}" }method 
  { $name="getGenericDeviceFromLocation" $return="java.util.List" $argu
  ments="{java.lang.String}" $names="{location}" }method { $name="suppo
- sition" $return="fr.esisar.icasa.cluedo.common.Card" $arguments="{fr.
+ sition" $return="fr.esisar.icasa.cluedo.common.Clue" $arguments="{fr.
  esisar.icasa.cluedo.common.Player,fr.esisar.icasa.cluedo.common.Crime
  }" $names="{player,supposition}" }method { $name="shuffle" }method { 
  $name="register" $return="fr.esisar.icasa.cluedo.common.Player" $argu

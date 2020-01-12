@@ -1,6 +1,7 @@
 package fr.esisar.icasa.cluedo.plate;
 
 import fr.esisar.icasa.cluedo.common.Card;
+import fr.esisar.icasa.cluedo.common.Clue;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
@@ -36,5 +37,5 @@ public interface CluedoPlateService {
 	 * @return
 	 * @throws Exception
 	 */
-	Card supposition(Player player, Crime supposition) throws Exception;
+	Clue supposition(Player player, Crime supposition) throws Exception;
 }

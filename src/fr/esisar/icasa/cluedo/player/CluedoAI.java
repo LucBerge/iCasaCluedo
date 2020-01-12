@@ -47,38 +47,30 @@ public class CluedoAI {
 		while (!cluedoPlateService.AICanChoose()) {sleep();}
 
 		//Selection
-		try {
-			me = cluedoPlateService.register(Person.MADAME_LEBLANC, "AI");
-		} catch (Exception e) {
+		for(Person person:Person.ALL) {
 			try {
-				me = cluedoPlateService.register(Person.MADAME_PERVANCHE, "AI");
-			} catch (Exception e1) {
-				try {
-					me = cluedoPlateService.register(Person.COLONEL_MOUTARDE, "AI");
-				} catch (Exception e2) {
-					try {
-						me = cluedoPlateService.register(Person.MADEMOISELLE_ROSE, "AI");
-					} catch (Exception e3) {
-						e3.printStackTrace();
-					}
-				}
-			}
+				me = cluedoPlateService.register(person, "AI");
+			} catch (Exception e) {}
 		}
+		
+		//If the AI can play
+		if(me != null) {
+			
+			//Wait for the game to start
+			while (!cluedoPlateService.isGameStarted()) {sleep();}
 
-		//Wait for the game to start
-		while (!cluedoPlateService.isGameStarted()) {sleep();}
+			//While no finished
+			while (cluedoPlateService.isGameStarted()) {
 
-		//While no finished
-		while (cluedoPlateService.isGameStarted()) {
+				//Wait for his turn
+				while (!cluedoPlateService.myTurn(me)) {sleep();}
 
-			//Wait for his turn
-			while (!cluedoPlateService.myTurn(me)) {sleep();}
-
-			//Make a supposition
-			try {
-				Crime supposition = new Crime(Person.COLONEL_MOUTARDE, Weapon.LAMPE, Room.BUREAU);
-				cluedoPlateService.supposition(me, supposition);
-			} catch (Exception e) {
+				//Make a supposition
+				try {
+					Crime supposition = new Crime(Person.COLONEL_MOUTARDE, Weapon.LAMPE, Room.BUREAU);
+					cluedoPlateService.supposition(me, supposition);
+				} catch (Exception e) {
+				}
 			}
 		}
 	}

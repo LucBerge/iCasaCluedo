@@ -43,4 +43,15 @@ public class Player {
 	public String toString() {
 		return "Player [name=" + name + ", person=" + person + ", cards=" + cards + "]";
 	}
+
+	public Clue getClue(Crime supposition) {
+		if(cards.contains(supposition.getPerson()))
+			return new Clue(supposition.getPerson(), this);
+		if(cards.contains(supposition.getRoom()))
+			return new Clue(supposition.getRoom(), this);
+		if(cards.contains(supposition.getWeapon()))
+			return new Clue(supposition.getWeapon(), this);
+		else
+			return null;
+	}
 }

@@ -10,6 +10,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 
 import fr.esisar.icasa.cluedo.common.Card;
+import fr.esisar.icasa.cluedo.common.Clue;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
@@ -26,15 +27,6 @@ import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 @Instantiate(name = "CluedoPlate")
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateService, CluedoCommandService {
-	/**
-	 * The name of the LOCATION property
-	 */
-	public static final String LOCATION_PROPERTY_NAME = "Location";
-
-	/**
-	 * The name of the location for unknown value
-	 */
-	public static final String LOCATION_UNKNOWN = "unknown";
 
 	/**
 	 * All the person cards in the game
@@ -150,10 +142,19 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
-		//	System.out.println(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString());
-		//	System.out.println(getGenericDeviceFromLocation(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString()));
-		System.out.println(persons.length);
-		System.out.println(genericDevices.length);
+		if (gameStarted) {
+			List<GenericDevice> devices = getGenericDeviceFromLocation(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
+			
+			if(devices.size() == 1) {
+				Weapon weapon =  Weapon.fromSerialNumber(devices.get(0).getSerialNumber());
+				Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
+				Person person = null;
+				
+				System.out.println(weapon);
+				System.out.println(room);
+				System.out.println(person);
+			}
+		}
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	private synchronized List<GenericDevice> getGenericDeviceFromLocation(String location) {
 		List<GenericDevice> binaryLightsLocation = new ArrayList<GenericDevice>();
 		for (GenericDevice genericDevice : genericDevices) {
-			if (genericDevice.getPropertyValue(LOCATION_PROPERTY_NAME).equals(location)) {
+			if (genericDevice.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).equals(location)) {
 				binaryLightsLocation.add(genericDevice);
 			}
 		}
@@ -173,11 +174,11 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	}
 
 	@Override
-	public synchronized Card supposition(Player player, Crime supposition) throws Exception {
+	public synchronized Clue supposition(Player player, Crime supposition) throws Exception {
 		if (!players.get(turn).equals(player))
 			throw new Exception("Ce n'est pas à vous de jouer.");
 
-		Card clue = null;
+		Clue clue = null;
 		System.out.println(player.getName() + " fait la suppose que " + supposition.getPerson() + " a tué avec "
 				+ supposition.getWeapon() + " dans le/la " + supposition.getRoom());
 
@@ -185,14 +186,33 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			System.out.println(player.getName() + "a gagné !!!");
 			reset();
 		} else {
-			System.out.println("Donne une info !");
+			Player givesClue;
+			for(int i=0;i<turn;i++) {
+				clue = players.get(i).getClue(supposition);
+				if(clue != null) {
+					break;
+				}
+			}
+			if(clue == null) {
+				for(int i=turn+1;i<players.size();i++) {
+					clue = players.get(i).getClue(supposition);
+					if(clue != null) {
+						break;
+					}
+				}
+			}
 		}
-
+		
 		if (turn >= players.size() - 1)
 			turn = 0;
 		else
 			turn++;
 
+		if(clue != null)
+			System.out.println(clue.getPlayer().getName() + " montre la carte " + clue.getCard().getName());
+		else
+			System.out.println("Personne ne possède ces cartes !");
+			
 		return clue;
 	}
 
@@ -303,13 +323,11 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public void personAdded(fr.liglab.adele.icasa.simulator.Person arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("==================0");
 	}
 
 	@Override
 	public void personDeviceAttached(fr.liglab.adele.icasa.simulator.Person arg0, LocatedDevice arg1) {
 		// TODO Auto-generated method stub
-		System.out.println("==================1");
 	}
 
 	@Override

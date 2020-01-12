@@ -13,4 +13,12 @@ public class Person extends Card{
     private Person(String name) {
     	super(name);
     }
+    
+    public static Person fromName(String name) {
+    	for(Person person:ALL) {
+    		if(person.getName().contentEquals(name))
+    			return person;
+    	}
+    	return null;
+    }
 }

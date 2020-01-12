@@ -4,7 +4,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 import org.apache.felix.ipojo.annotations.Requires;
 
-import fr.esisar.icasa.cluedo.common.Person2;
+import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.player.CluedoPlayerService;
 import fr.liglab.adele.icasa.command.handler.Command;
@@ -37,27 +37,26 @@ public class CluedoPlayerCommand {
 		try {
 			switch (person) {
 			case "COLONEL_MOUTARDE":
-				cluedoPlayerService.join(Person2.COLONEL_MOUTARDE, "Joueur");
+				cluedoPlayerService.join(Person.COLONEL_MOUTARDE, "Joueur");
 				break;
 			case "DOCTEUR_OLIVE":
-				cluedoPlayerService.join(Person2.DOCTEUR_OLIVE, "Joueur");
+				cluedoPlayerService.join(Person.DOCTEUR_OLIVE, "Joueur");
 				break;
 			case "MADAME_LEBLANC":
-				cluedoPlayerService.join(Person2.MADAME_LEBLANC, "Joueur");
+				cluedoPlayerService.join(Person.MADAME_LEBLANC, "Joueur");
 				break;
 			case "MADAME_PERVANCHE":
-				cluedoPlayerService.join(Person2.MADAME_PERVANCHE, "Joueur");
+				cluedoPlayerService.join(Person.MADAME_PERVANCHE, "Joueur");
 				break;
 			case "MADEMOISELLE_ROSE":
-				cluedoPlayerService.join(Person2.MADEMOISELLE_ROSE, "Joueur");
+				cluedoPlayerService.join(Person.MADEMOISELLE_ROSE, "Joueur");
 				break;
 			case "PROFESSEUR_VIOLET":
-				cluedoPlayerService.join(Person2.PROFESSEUR_VIOLET, "Joueur");
+				cluedoPlayerService.join(Person.PROFESSEUR_VIOLET, "Joueur");
 				break;
 			default:
 				System.out.println("Le personnage " + person + " n'existe pas.");
 			}
-			getPlayer();
 		}catch(Exception e) {
 			System.out.println(e.getMessage());
 		}

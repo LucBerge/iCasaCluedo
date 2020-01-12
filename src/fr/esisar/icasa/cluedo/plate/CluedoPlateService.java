@@ -2,7 +2,7 @@ package fr.esisar.icasa.cluedo.plate;
 
 import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Crime;
-import fr.esisar.icasa.cluedo.common.Person2;
+import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 
 public interface CluedoPlateService {
@@ -13,7 +13,7 @@ public interface CluedoPlateService {
      * @return the player instance
      * @throws Exception if this player has already been registered or the game already started.
      */
-    public Player register(Person2 person, String name) throws Exception;
+    public Player register(Person person, String name) throws Exception;
 
 	/** Say if AIs can choose there person.
 	 * @return true if they can.

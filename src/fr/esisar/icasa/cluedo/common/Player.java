@@ -7,11 +7,11 @@ import java.util.UUID;
 public class Player {
 
 	private UUID uuid;
-	private Person2 person;
+	private Person person;
 	private String name;
 	private List<Card> cards;
 	
-	public Player(Person2 person, String name) {
+	public Player(Person person, String name) {
 		super();
 		this.uuid = UUID.randomUUID();
 		this.person = person;
@@ -23,7 +23,7 @@ public class Player {
 		return uuid;
 	}
 
-	public Person2 getPerson() {
+	public Person getPerson() {
 		return person;
 	}
 	
@@ -41,6 +41,6 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "Player [person=" + person + ", cards=" + cards + "]";
+		return "Player [name=" + name + ", person=" + person + ", cards=" + cards + "]";
 	}
 }

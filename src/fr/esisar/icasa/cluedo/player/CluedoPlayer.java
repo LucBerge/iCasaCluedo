@@ -3,7 +3,7 @@ package fr.esisar.icasa.cluedo.player;
 import org.apache.felix.ipojo.annotations.Component;
 import org.apache.felix.ipojo.annotations.Instantiate;
 
-import fr.esisar.icasa.cluedo.common.Person2;
+import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.plate.CluedoPlateService;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
@@ -29,7 +29,7 @@ public class CluedoPlayer implements CluedoPlayerService {
 	}
 
 	@Override
-	public void join(Person2 person, String name) throws Exception {
+	public void join(Person person, String name) throws Exception {
 		if (me != null)
 			throw new Exception("Vous êtes déjà enregistré en tant que " + person.getName());
 		me = cluedoPlateService.register(person, name);

@@ -12,8 +12,9 @@ import org.apache.felix.ipojo.annotations.Instantiate;
 import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Crime;
 import fr.esisar.icasa.cluedo.common.Person;
-import fr.esisar.icasa.cluedo.common.Person2;
 import fr.esisar.icasa.cluedo.common.Player;
+import fr.esisar.icasa.cluedo.common.Room;
+import fr.esisar.icasa.cluedo.common.Weapon;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.device.DeviceListener;
 import fr.liglab.adele.icasa.device.GenericDevice;
@@ -38,17 +39,17 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	/**
 	 * All the person cards in the game
 	 */
-	public static final Card[] CARDS_PERSONS = Person.ALL;
+	public static final Card[] CARDS_PERSONS = Person.ALL.clone();
 
 	/**
 	 * All the person cards in the game
 	 */
-	public static final Card[] CARDS_WEAPONS = Person.ALL;
+	public static final Card[] CARDS_WEAPONS = Weapon.ALL.clone();
 
 	/**
 	 * All the person cards in the game
 	 */
-	public static final Card[] CARDS_ROOMS = Person.ALL;
+	public static final Card[] CARDS_ROOMS = Room.ALL.clone();
 
 	/**
 	 * Define if the game has started
@@ -149,9 +150,10 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
-		//		System.out.println(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString());
-		//		System.out.println(getGenericDeviceFromLocation(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString()));
+		//	System.out.println(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString());
+		//	System.out.println(getGenericDeviceFromLocation(device.getPropertyValue(LOCATION_PROPERTY_NAME).toString()));
 		System.out.println(persons.length);
+		System.out.println(genericDevices.length);
 	}
 
 	/**
@@ -179,12 +181,18 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		System.out.println(player.getName() + " fait la suppose que " + supposition.getPerson() + " a tué avec "
 				+ supposition.getWeapon() + " dans le/la " + supposition.getRoom());
 
-		if (crime.getPerson().equals(supposition)) {
+		if (crime.equals(supposition)) {
 			System.out.println(player.getName() + "a gagné !!!");
 			reset();
 		} else {
 			System.out.println("Donne une info !");
 		}
+
+		if (turn >= players.size() - 1)
+			turn = 0;
+		else
+			turn++;
+
 		return clue;
 	}
 
@@ -222,7 +230,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 		//Shuffle all
 		Collections.shuffle(shuffledCards);
-
+		
 		//Distribute
 		int i = 0;
 		for (Player player : players) {
@@ -240,13 +248,14 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	};
 
 	@Override
-	public synchronized Player register(Person2 person, String name) throws Exception {
+	public synchronized Player register(Person person, String name) throws Exception {
 		if (gameStarted)
 			throw new Exception("Le jeu a déjà débuté !");
 
 		if (players.stream().anyMatch(p -> p.getPerson().equals(person)))
 			throw new Exception("Personnage déjà utilisé.");
 
+		System.out.println(name + " joue avec " + person);
 		Player player = new Player(person, name);
 		players.add(player);
 
@@ -294,13 +303,13 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public void personAdded(fr.liglab.adele.icasa.simulator.Person arg0) {
 		// TODO Auto-generated method stub
-
+		System.out.println("==================0");
 	}
 
 	@Override
 	public void personDeviceAttached(fr.liglab.adele.icasa.simulator.Person arg0, LocatedDevice arg1) {
 		// TODO Auto-generated method stub
-
+		System.out.println("==================1");
 	}
 
 	@Override

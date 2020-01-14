@@ -3,8 +3,10 @@ package fr.esisar.icasa.cluedo.plate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.felix.ipojo.annotations.Component;
 
@@ -22,6 +24,7 @@ import fr.liglab.adele.icasa.device.DeviceListener;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.location.LocatedDevice;
 import fr.liglab.adele.icasa.location.Position;
+import fr.liglab.adele.icasa.service.location.PersonLocationService;
 import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 
 @Component
@@ -63,8 +66,12 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	**/
 	private Crime crime;
 
+	/** PersonLocationService  dependency */
+	private PersonLocationService personLocationService;
+
 	/** Devices/Weapons on the plate dependency */
 	private GenericDevice[] genericDevices;
+
 	/** Field for persons dependency */
 	private fr.liglab.adele.icasa.simulator.Person[] persons;
 
@@ -150,18 +157,24 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
+		
+
 		if (gameStarted) {
 			List<GenericDevice> devices = getGenericDeviceFromLocation(
 					device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
+			Set<String> persons = personLocationService
+					.getPersonInZone(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
 
-			if (devices.size() == 1) {
+			if (devices.size() == 1 && persons.size() == 1) {
+				Iterator<String> iterator = persons.iterator();
+				Person person = Person.fromName(iterator.next());
 				Weapon weapon = Weapon.fromSerialNumber(devices.get(0).getSerialNumber());
 				Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-				Person person = null;
-
-				System.out.println(weapon);
-				System.out.println(room);
-				System.out.println(person);
+				
+				try {
+					supposition(new Supposition(players.get(0), new Crime(person, weapon, room)));
+				} catch (Exception e) {
+				}
 			}
 		}
 	}
@@ -217,15 +230,15 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 		if (clue != null) {
 			clues.add(clue);
-			
-			if(turn == 1 && !fullAI) {
+
+			if (turn == 1 && !fullAI) {
 				Logger.display(clue.getPlayer().getName() + " montre " + clue.getCard().getName(), fullAI);
-			}else if (fullAI){
+			} else if (fullAI) {
 				Logger.display(clue.toString(), fullAI);
-			}else {
+			} else {
 				Logger.display(clue.getPlayer().getName() + " montre une des cartes.", fullAI);
 			}
-				
+
 		} else if (gameStarted)
 			Logger.display("Personne ne possède ces cartes !", fullAI);
 

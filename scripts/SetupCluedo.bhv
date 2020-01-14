@@ -61,8 +61,8 @@
 	<move-person-zone personId="Mademoiselle Rose" zoneId="waiting" />
 	<create-person id="Professeur Violet" type="Boy" />
 	<move-person-zone personId="Professeur Violet" zoneId="waiting" />
-	<create-person id="Madame Leblanc" type="Mother" />
-	<move-person-zone personId="Madame Leblanc" zoneId="waiting" />
+	<create-person id="Madame LeBlanc" type="Mother" />
+	<move-person-zone personId="Madame LeBlanc" zoneId="waiting" />
 	<create-person id="Docteur Olive" type="Father" />
 	<move-person-zone personId="Docteur Olive" zoneId="waiting" />
 		

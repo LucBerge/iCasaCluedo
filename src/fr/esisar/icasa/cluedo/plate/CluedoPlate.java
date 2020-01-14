@@ -11,6 +11,7 @@ import org.apache.felix.ipojo.annotations.Component;
 import fr.esisar.icasa.cluedo.common.Card;
 import fr.esisar.icasa.cluedo.common.Clue;
 import fr.esisar.icasa.cluedo.common.Crime;
+import fr.esisar.icasa.cluedo.common.Logger;
 import fr.esisar.icasa.cluedo.common.Person;
 import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.common.Room;
@@ -139,11 +140,11 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public synchronized void reset() {
 		if (gameStarted) {
+			fullAI = false;
 			players.clear();
 			clues.clear();
-			gameStarted = false;
 			turn = -1;
-			fullAI = false;
+			gameStarted = false;
 		}
 	}
 
@@ -187,10 +188,10 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 			throw new Exception("Ce n'est pas à vous de jouer.");
 
 		Clue clue = null;
-		System.out.println(supposition);
+		Logger.display(supposition.toString(), fullAI);
 
 		if (crime.equals(supposition.getCrime())) {
-			System.out.println(supposition.getPlayer().getName() + " a gagné !!!");
+			Logger.display(supposition.getPlayer().getName() + " a gagné !!!", fullAI);
 			reset();
 		} else {
 			for (int i = 0; i < turn; i++) {
@@ -216,9 +217,17 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 		if (clue != null) {
 			clues.add(clue);
-			System.out.println(clue);
+			
+			if(turn == 1 && !fullAI) {
+				Logger.display(clue.getPlayer().getName() + " montre " + clue.getCard().getName(), fullAI);
+			}else if (fullAI){
+				Logger.display(clue.toString(), fullAI);
+			}else {
+				Logger.display(clue.getPlayer().getName() + " montre une des cartes.", fullAI);
+			}
+				
 		} else if (gameStarted)
-			System.out.println("Personne ne possède ces cartes !");
+			Logger.display("Personne ne possède ces cartes !", fullAI);
 
 		return clue;
 	}

@@ -28,6 +28,8 @@ public class CluedoAI {
 	/** Field for followMeConfiguration dependency */
 	private CluedoPlateService cluedoPlateService;
 
+	private List<Clue> clues = new ArrayList<Clue>();
+	
 	/** Component Lifecycle Method */
 	public void stop() {
 		System.out.println("Stopping " + this.getClass().getName());
@@ -52,6 +54,11 @@ public class CluedoAI {
 	}
 
 	private void play() throws InterruptedException {
+		//Wait for the game to stop
+		while (cluedoPlateService.isGameStarted()) {
+			sleep();
+		}
+		
 		//Wait for the player selection
 		while (!cluedoPlateService.AICanChoose()) {
 			sleep();
@@ -87,21 +94,26 @@ public class CluedoAI {
 
 					//Make a supposition
 					try {
-						cluedoPlateService.supposition(suppose());
+						clues.add(cluedoPlateService.supposition(suppose()));
 					} catch (Exception e) {
 					}
 				}
 			} catch (Exception e1) {
 			}
+			reset();
 		}
 	}
 
+	private void reset() {
+		me = null;
+		clues.clear();
+	}
+	
 	private Supposition suppose() {
 		Person person;
 		Weapon weapon;
 		Room room;
 		List<Card> known = new ArrayList<Card>();
-		List<Clue> clues = cluedoPlateService.getClues();
 		clues.forEach(c -> known.add(c.getCard()));
 
 		do {

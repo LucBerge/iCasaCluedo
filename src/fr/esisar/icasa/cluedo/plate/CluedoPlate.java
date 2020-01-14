@@ -52,7 +52,7 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 	/** 
 	* The number of players :
 	**/
-	private int numberOfPlayers = 4;
+	private int numberOfPlayers = 3;
 
 	/**
 	 * The turn index.
@@ -100,7 +100,7 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 		if (gameStarted)
 			throw new Exception("Le jeu a déjà débuté !");
 
-		if (players.size() > 0)
+		if (players.size() > numberOfPlayers)
 			throw new Exception(players.size() + " joueurs ont déjà rejoind la partie.");
 
 		this.numberOfPlayers = numberOfPlayers;
@@ -126,23 +126,26 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 		System.out.println("Stopping " + this.getClass().getName());
 		for (GenericDevice genericDevice : genericDevices)
 			genericDevice.removeListener(this);
-		reset();
+		personListener.stop();
 	}
 
 	/** Component Lifecycle Method */
 	public synchronized void start() {
 		System.out.println("Starting " + this.getClass().getName());
+		Logger.display("Deplacez un personnage dans une zone pour le jouer.", fullAI);
+		personListener = new PersonListener(this);
+		personListener.start();
 	}
 
 	@Override
 	public synchronized void reset() {
 		if (gameStarted) {
-			personListener.stop();
 			fullAI = false;
 			players.clear();
 			clues.clear();
 			turn = -1;
 			gameStarted = false;
+			Logger.display("Deplacez un personnage dans une zone pour le jouer.", fullAI);
 		}
 	}
 
@@ -166,6 +169,7 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 	}
 
 	public void personLocationModified(Person person, Room room) {
+		System.out.println(person);
 		if (gameStarted) {
 			List<Weapon> weapons = getWeaponsFromRoom(room);
 
@@ -174,6 +178,11 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 					supposition(new Supposition(players.get(0), new Crime(person, weapons.get(0), room)));
 				} catch (Exception e) {
 				}
+			}
+		} else {
+			try {
+				register(person, "Joueur");
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -291,8 +300,14 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 		players.stream().forEach(p -> System.out.println(p));
 		gameStarted = true;
 		turn = 0;
-		personListener = new PersonListener(this);
-		personListener.start();
+
+		if (!fullAI) {
+			StringBuilder builder = new StringBuilder("Voici vos cartes : ");
+			for (Card card : players.get(0).getCards())
+				builder.append(card.getName() + ", ");
+			builder.delete(builder.length() - 2, builder.length());
+			Logger.display(builder.toString(), fullAI);
+		}
 	};
 
 	@Override

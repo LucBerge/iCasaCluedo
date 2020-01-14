@@ -36,8 +36,10 @@ public class CluedoPlateCommand {
 	public void setNumberOfPlayers(String number) {
 		try {
 			cluedoCommandService.setNumberOfPlayers(Integer.parseInt(number));
-		}catch(Exception e) {
+		}catch(NumberFormatException e) {
 			System.out.println(number + " is not a number.");
+		}catch(Exception e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	

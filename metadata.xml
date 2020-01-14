@@ -7,10 +7,6 @@
     </requires>
     <callback method="start" transition="validate"/>
     <callback method="stop" transition="invalidate"/>
-    <requires aggregate="true" optional="true" specification="fr.liglab.adele.icasa.simulator.Person" field="persons">
-      <callback method="bindPerson" type="bind"/>
-      <callback method="unbindPerson" type="unbind"/>
-    </requires>
     <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoPlateService"/>
     <provides specifications="fr.esisar.icasa.cluedo.plate.CluedoCommandService"/>
     <requires specification="fr.liglab.adele.icasa.service.location.PersonLocationService" field="personLocationService"/>

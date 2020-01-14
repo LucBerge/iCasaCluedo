@@ -29,7 +29,7 @@ public class CluedoAI {
 	private CluedoPlateService cluedoPlateService;
 
 	private List<Clue> clues = new ArrayList<Clue>();
-	
+
 	/** Component Lifecycle Method */
 	public void stop() {
 		System.out.println("Stopping " + this.getClass().getName());
@@ -58,7 +58,7 @@ public class CluedoAI {
 		while (cluedoPlateService.isGameStarted()) {
 			sleep();
 		}
-		
+
 		//Wait for the player selection
 		while (!cluedoPlateService.AICanChoose()) {
 			sleep();
@@ -108,7 +108,7 @@ public class CluedoAI {
 		me = null;
 		clues.clear();
 	}
-	
+
 	private Supposition suppose() {
 		Person person;
 		Weapon weapon;

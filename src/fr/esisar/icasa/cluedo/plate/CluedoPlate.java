@@ -19,17 +19,15 @@ import fr.esisar.icasa.cluedo.common.Player;
 import fr.esisar.icasa.cluedo.common.Room;
 import fr.esisar.icasa.cluedo.common.Supposition;
 import fr.esisar.icasa.cluedo.common.Weapon;
+import fr.esisar.icasa.cluedo.listener.PersonListener;
 import fr.liglab.adele.icasa.command.handler.CommandProvider;
 import fr.liglab.adele.icasa.device.DeviceListener;
 import fr.liglab.adele.icasa.device.GenericDevice;
-import fr.liglab.adele.icasa.location.LocatedDevice;
-import fr.liglab.adele.icasa.location.Position;
 import fr.liglab.adele.icasa.service.location.PersonLocationService;
-import fr.liglab.adele.icasa.simulator.listener.PersonListener;
 
 @Component
 @CommandProvider(namespace = "cluedo")
-public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateService, CluedoCommandService {
+public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCommandService {
 
 	/**
 	 * All the person cards in the game
@@ -73,7 +71,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	private GenericDevice[] genericDevices;
 
 	/** Field for persons dependency */
-	private fr.liglab.adele.icasa.simulator.Person[] persons;
+	private PersonListener personListener;
 
 	/** Registered players*/
 	private List<Player> players = new ArrayList<Player>();
@@ -82,6 +80,10 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	private List<Clue> clues = new ArrayList<Clue>();
 
 	private boolean fullAI = false;
+
+	public PersonLocationService getPersonLocationService() {
+		return this.personLocationService;
+	}
 
 	@Override
 	public int getNumberOfPlayers() {
@@ -119,24 +121,12 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		genericDevice.removeListener(this);
 	}
 
-	/** Bind Method for persons dependency */
-	public synchronized void bindPerson(fr.liglab.adele.icasa.simulator.Person person, Map<String, String> properties) {
-		System.out.println("Bind person " + person.getName());
-		person.addListener(this);
-	}
-
-	/** Unbind Method for persons dependency */
-	public synchronized void unbindPerson(fr.liglab.adele.icasa.simulator.Person person,
-			Map<String, String> properties) {
-		System.out.println("Unbind person " + person.getName());
-		person.removeListener(this);
-	}
-
 	/** Component Lifecycle Method */
 	public synchronized void stop() {
 		System.out.println("Stopping " + this.getClass().getName());
 		for (GenericDevice genericDevice : genericDevices)
 			genericDevice.removeListener(this);
+		reset();
 	}
 
 	/** Component Lifecycle Method */
@@ -147,6 +137,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public synchronized void reset() {
 		if (gameStarted) {
+			personListener.stop();
 			fullAI = false;
 			players.clear();
 			clues.clear();
@@ -157,19 +148,31 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
-		
 		if (gameStarted) {
 			Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-			
-			if(room != null) {
+
+			if (room != null) {
 				List<Weapon> weapons = getWeaponsFromRoom(room);
 				List<Person> persons = getPersonsFromRoom(room);
-	
+
 				if (weapons.size() == 1 && persons.size() == 1) {
 					try {
 						supposition(new Supposition(players.get(0), new Crime(persons.get(0), weapons.get(0), room)));
 					} catch (Exception e) {
 					}
+				}
+			}
+		}
+	}
+
+	public void personLocationModified(Person person, Room room) {
+		if (gameStarted) {
+			List<Weapon> weapons = getWeaponsFromRoom(room);
+
+			if (weapons.size() == 1) {
+				try {
+					supposition(new Supposition(players.get(0), new Crime(person, weapons.get(0), room)));
+				} catch (Exception e) {
 				}
 			}
 		}
@@ -190,7 +193,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		}
 		return weapons;
 	}
-	
+
 	/**
 	 * Return all persons from the given room
 	 * 
@@ -201,7 +204,7 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		Set<String> personsName = personLocationService.getPersonInZone(room.getName());
 		List<Person> persons = new ArrayList<Person>();
 		Iterator<String> iterator = personsName.iterator();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 			persons.add(Person.fromName(iterator.next()));
 		return persons;
 	}
@@ -288,6 +291,8 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 		players.stream().forEach(p -> System.out.println(p));
 		gameStarted = true;
 		turn = 0;
+		personListener = new PersonListener(this);
+		personListener.start();
 	};
 
 	@Override
@@ -354,31 +359,6 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 
 	@Override
 	public void deviceRemoved(GenericDevice arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void personAdded(fr.liglab.adele.icasa.simulator.Person arg0) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void personDeviceAttached(fr.liglab.adele.icasa.simulator.Person arg0, LocatedDevice arg1) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void personDeviceDetached(fr.liglab.adele.icasa.simulator.Person arg0, LocatedDevice arg1) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void personMoved(fr.liglab.adele.icasa.simulator.Person arg0, Position arg1) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void personRemoved(fr.liglab.adele.icasa.simulator.Person arg0) {
 		// TODO Auto-generated method stub
 	}
 }

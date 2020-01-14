@@ -158,41 +158,52 @@ public class CluedoPlate implements DeviceListener, PersonListener, CluedoPlateS
 	@Override
 	public void devicePropertyModified(GenericDevice device, String propertyName, Object oldValue, Object newValue) {
 		
-
 		if (gameStarted) {
-			List<GenericDevice> devices = getGenericDeviceFromLocation(
-					device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-			Set<String> persons = personLocationService
-					.getPersonInZone(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-
-			if (devices.size() == 1 && persons.size() == 1) {
-				Iterator<String> iterator = persons.iterator();
-				Person person = Person.fromName(iterator.next());
-				Weapon weapon = Weapon.fromSerialNumber(devices.get(0).getSerialNumber());
-				Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
-				
-				try {
-					supposition(new Supposition(players.get(0), new Crime(person, weapon, room)));
-				} catch (Exception e) {
+			Room room = Room.fromName(device.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).toString());
+			
+			if(room != null) {
+				List<Weapon> weapons = getWeaponsFromRoom(room);
+				List<Person> persons = getPersonsFromRoom(room);
+	
+				if (weapons.size() == 1 && persons.size() == 1) {
+					try {
+						supposition(new Supposition(players.get(0), new Crime(persons.get(0), weapons.get(0), room)));
+					} catch (Exception e) {
+					}
 				}
 			}
 		}
 	}
 
 	/**
-	 * Return all GenericDevice from the given location
+	 * Return all the weapons from the given room
 	 * 
 	 * @param location - The given location
 	 * @return The list of matching GenericDevice
 	 */
-	private synchronized List<GenericDevice> getGenericDeviceFromLocation(String location) {
-		List<GenericDevice> binaryLightsLocation = new ArrayList<GenericDevice>();
+	private synchronized List<Weapon> getWeaponsFromRoom(Room room) {
+		List<Weapon> weapons = new ArrayList<Weapon>();
 		for (GenericDevice genericDevice : genericDevices) {
-			if (genericDevice.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).equals(location)) {
-				binaryLightsLocation.add(genericDevice);
+			if (genericDevice.getPropertyValue(GenericDevice.LOCATION_PROPERTY_NAME).equals(room.getName())) {
+				weapons.add(Weapon.fromSerialNumber(genericDevice.getSerialNumber()));
 			}
 		}
-		return binaryLightsLocation;
+		return weapons;
+	}
+	
+	/**
+	 * Return all persons from the given room
+	 * 
+	 * @param location - The given location
+	 * @return The list of matching Persons
+	 */
+	private synchronized List<Person> getPersonsFromRoom(Room room) {
+		Set<String> personsName = personLocationService.getPersonInZone(room.getName());
+		List<Person> persons = new ArrayList<Person>();
+		Iterator<String> iterator = personsName.iterator();
+		while(iterator.hasNext())
+			persons.add(Person.fromName(iterator.next()));
+		return persons;
 	}
 
 	@Override

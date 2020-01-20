@@ -25,6 +25,7 @@ import fr.liglab.adele.icasa.device.DeviceListener;
 import fr.liglab.adele.icasa.device.GenericDevice;
 import fr.liglab.adele.icasa.service.location.PersonLocationService;
 
+@SuppressWarnings("rawtypes")
 @Component
 @CommandProvider(namespace = "cluedo")
 public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCommandService {
@@ -169,7 +170,6 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 	}
 
 	public void personLocationModified(Person person, Room room) {
-		System.out.println(person);
 		if (gameStarted) {
 			List<Weapon> weapons = getWeaponsFromRoom(room);
 
@@ -353,27 +353,17 @@ public class CluedoPlate implements DeviceListener, CluedoPlateService, CluedoCo
 	}
 
 	@Override
-	public void deviceAdded(GenericDevice arg0) {
-		// TODO Auto-generated method stub
-	}
+	public void deviceAdded(GenericDevice arg0) {}
 
 	@Override
-	public void deviceEvent(GenericDevice arg0, Object arg1) {
-		// TODO Auto-generated method stub
-	}
+	public void deviceEvent(GenericDevice arg0, Object arg1) {}
 
 	@Override
-	public void devicePropertyAdded(GenericDevice arg0, String arg1) {
-		// TODO Auto-generated method stub
-	}
+	public void devicePropertyAdded(GenericDevice arg0, String arg1) {}
 
 	@Override
-	public void devicePropertyRemoved(GenericDevice arg0, String arg1) {
-		// TODO Auto-generated method stub
-	}
+	public void devicePropertyRemoved(GenericDevice arg0, String arg1) {}
 
 	@Override
-	public void deviceRemoved(GenericDevice arg0) {
-		// TODO Auto-generated method stub
-	}
+	public void deviceRemoved(GenericDevice arg0) {}
 }

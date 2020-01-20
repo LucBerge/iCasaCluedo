@@ -9,39 +9,44 @@ import fr.esisar.icasa.cluedo.common.Supposition;
 
 public interface CluedoPlateService {
     /**
-     * Register the player with a corresponding figure
+     * Register the player with a corresponding person.
      * @param person
      * @param name
      * @return the player instance
-     * @throws Exception if this player has already been registered or the game already started.
+     * @throws Exception if this person has already been registered or the game has already started.
      */
     public Player register(Person person, String name) throws Exception;
 
-	/** Say if AIs can choose there person.
+	/** 
+	 * Says if AIs can choose there person.
 	 * @return true if they can.
 	 */
-	boolean AICanChoose();
+    public boolean AICanChoose();
 
-	/** Say if a player can play.
+	/** 
+	 * Says if a player can play.
 	 * @return true if he can.
-	 * @throws Exception 
+	 * @throws Exception if the game is not on.
 	 */
-	boolean myTurn(Player player) throws Exception;
+    public boolean myTurn(Player player) throws Exception;
 
-	/**
-	 * @return
+	/** 
+	 * Says if the game has started.
+	 * @return true if the game has started.
 	 */
-	boolean isGameStarted();
+    public boolean isGameStarted();
 
-	/**
-	 * @param supposition
-	 * @return
-	 * @throws Exception
+	/** 
+	 * Makes a supposition.
+	 * @param supposition The supposition.
+	 * @return the corresponding clue.
+	 * @throws Exception if it is not you turn.
 	 */
-	Clue supposition(Supposition supposition) throws Exception;
+    public Clue supposition(Supposition supposition) throws Exception;
 
-	/** Get all the known clues.
+	/** 
+	 * Get all the known clues.
 	 * @return Known clues.
 	 */
-	List<Clue> getClues();
+    public List<Clue> getClues();
 }

@@ -10,7 +10,7 @@ public interface CluedoCommandService {
     /**
      * Sets the number of players.
      * @param numberOfPlayers - The new number of players.
-     * @throws Exception si impossible de modifier le nombre de joueur
+     * @throws Exception si impossible de modifier le nombre de joueur.
      */
     public void setNumberOfPlayers(int numberOfPlayers) throws Exception;
     
@@ -19,8 +19,9 @@ public interface CluedoCommandService {
      */
     public void reset();
 
-	/**
-	 * @param fullAI
+	/** 
+	 * Allows AIs to join the game.
+	 * @param fullAI true to allows AIs.
 	 */
-	void setFullAI(boolean fullAI);
+	public void setFullAI(boolean fullAI);
 }
